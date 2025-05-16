@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">Domotika</string>
     <string name="hola_mundo_desde_android_studio">Hola Mundo desde Android Studio!</string>
+    <string name="open_drawer">Abrir menú lateral</string>
+    <string name="close_drawer">Cerrar menú lateral</string>
 </resources>

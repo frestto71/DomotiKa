@@ -4,16 +4,24 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.view.View
 import android.view.MotionEvent
 import android.widget.TextView
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.widget.Toolbar
+import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.card.MaterialCardView
+import com.google.android.material.navigation.NavigationView
 import java.text.SimpleDateFormat
 import java.util.*
+import android.graphics.Color
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var timeTextView: TextView
+    private lateinit var drawerLayout: DrawerLayout
+    private lateinit var navView: NavigationView
+    private lateinit var toggle: ActionBarDrawerToggle
+
     private val handler = Handler(Looper.getMainLooper())
     private val timeFormat = SimpleDateFormat("hh:mm:ss a", Locale.getDefault())
 
@@ -29,16 +37,42 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         // Ocultar barra de estado y navegación
-        window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_FULLSCREEN
-                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                or View.SYSTEM_UI_FLAG_LAYOUT_STABLE)
-        supportActionBar?.hide()
+        window.decorView.systemUiVisibility = (android.view.View.SYSTEM_UI_FLAG_FULLSCREEN
+                or android.view.View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                or android.view.View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                or android.view.View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                or android.view.View.SYSTEM_UI_FLAG_LAYOUT_STABLE)
 
         setContentView(R.layout.activity_main)
 
         timeTextView = findViewById(R.id.timeText)
+
+        // Inicializa drawerLayout y navView ANTES de usarlos
+        drawerLayout = findViewById(R.id.drawer_layout)
+        navView = findViewById(R.id.nav_view)
+
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        setSupportActionBar(toolbar)
+
+        // Configurar toggle y añadirlo al DrawerLayout
+        toggle = ActionBarDrawerToggle(this, drawerLayout, toolbar,
+            R.string.open_drawer, R.string.close_drawer)
+        drawerLayout.addDrawerListener(toggle)
+        toggle.syncState()
+
+        // Cambiar color icono hamburguesa y título
+        toggle.drawerArrowDrawable.color = Color.parseColor("#00FFE0")
+        toolbar.setTitleTextColor(Color.parseColor("#00FFE0"))
+
+        navView.setNavigationItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.nav_inicio -> {
+                    drawerLayout.closeDrawers()
+                    true
+                }
+                else -> false
+            }
+        }
 
         // Asignar efecto lift a las tarjetas MaterialCardView
         val cardView1 = findViewById<MaterialCardView>(R.id.cardView1)
