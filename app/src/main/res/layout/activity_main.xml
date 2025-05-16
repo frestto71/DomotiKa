@@ -14,19 +14,20 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- Horizontal LinearLayout para título + hora -->
+        <!-- Título + hora -->
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:layout_marginBottom="32dp">
+            android:layout_marginBottom="15dp">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="otiKa"
                 android:id="@+id/logoText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="DomotiKa"
                 android:textSize="26sp"
                 android:textStyle="bold"
                 android:textColor="#00FFE0"
@@ -52,14 +53,195 @@
             android:textColor="#00FFE0"
             android:layout_marginBottom="16dp" />
 
-        <TextView
-            android:id="@+id/sectionsContainer"
+        <!-- TARJETAS -->
+
+        <!-- Tarjeta 1 -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#00FFE0"
-            android:textSize="16sp"
-            android:paddingHorizontal="20dp"
-            android:paddingBottom="30dp" />
+            android:orientation="vertical"
+            android:background="#1e1e1e"
+            android:padding="16dp"
+            android:layout_marginBottom="20dp"
+            android:elevation="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Productos WiFi"
+                android:textColor="#00FFE0"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="10dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="📡 Routers"
+                android:textColor="#ffffff"
+                android:textSize="16sp"
+                android:paddingVertical="4dp"
+                android:paddingLeft="6dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="💡 Luces WiFi"
+                android:textColor="#ffffff"
+                android:textSize="16sp"
+                android:paddingVertical="4dp"
+                android:paddingLeft="6dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🔐 Cerraduras WiFi"
+                android:textColor="#ffffff"
+                android:textSize="16sp"
+                android:paddingVertical="4dp"
+                android:paddingLeft="6dp" />
+        </LinearLayout>
+
+        <!-- Tarjeta 2 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="#1e1e1e"
+            android:padding="16dp"
+            android:layout_marginBottom="20dp"
+            android:elevation="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Productos Bluetooth"
+                android:textColor="#00FFE0"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="10dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🎧 Bocinas"
+                android:textColor="#ffffff"
+                android:textSize="16sp"
+                android:paddingVertical="4dp"
+                android:paddingLeft="6dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🎮 Controles"
+                android:textColor="#ffffff"
+                android:textSize="16sp"
+                android:paddingVertical="4dp"
+                android:paddingLeft="6dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🖱️ Mouse"
+                android:textColor="#ffffff"
+                android:textSize="16sp"
+                android:paddingVertical="4dp"
+                android:paddingLeft="6dp" />
+        </LinearLayout>
+
+        <!-- Tarjeta 3 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="#1e1e1e"
+            android:padding="16dp"
+            android:layout_marginBottom="20dp"
+            android:elevation="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Productos Infrarrojo"
+                android:textColor="#00FFE0"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="10dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="📺 TV"
+                android:textColor="#ffffff"
+                android:textSize="16sp"
+                android:paddingVertical="4dp"
+                android:paddingLeft="6dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="📽️ Proyector"
+                android:textColor="#ffffff"
+                android:textSize="16sp"
+                android:paddingVertical="4dp"
+                android:paddingLeft="6dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="❄️ Clima"
+                android:textColor="#ffffff"
+                android:textSize="16sp"
+                android:paddingVertical="4dp"
+                android:paddingLeft="6dp" />
+        </LinearLayout>
+
+        <!-- Tarjeta 4 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="#1e1e1e"
+            android:padding="16dp"
+            android:layout_marginBottom="20dp"
+            android:elevation="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Productos Usb"
+                android:textColor="#00FFE0"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="10dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="📺 TV"
+                android:textColor="#ffffff"
+                android:textSize="16sp"
+                android:paddingVertical="4dp"
+                android:paddingLeft="6dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="📽️ Proyector"
+                android:textColor="#ffffff"
+                android:textSize="16sp"
+                android:paddingVertical="4dp"
+                android:paddingLeft="6dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="❄️ Clima"
+                android:textColor="#ffffff"
+                android:textSize="16sp"
+                android:paddingVertical="4dp"
+                android:paddingLeft="6dp" />
+        </LinearLayout>
 
     </LinearLayout>
 </ScrollView>
