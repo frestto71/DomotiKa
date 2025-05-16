@@ -25,7 +25,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="DoomotiKa"
+                android:text="motiKa"
                 android:id="@+id/logoText"
                 android:textSize="26sp"
                 android:textStyle="bold"
