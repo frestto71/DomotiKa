@@ -1,7 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.domotika">  <!-- asegúrate que el package coincide con tu app -->
+    package="com.example.domotika">
+
+    <!-- 🔐 PERMISOS PARA USB -->
+    <uses-feature android:name="android.hardware.usb.host" />
+    <uses-permission android:name="android.hardware.usb.host" />
+    <uses-permission android:name="android.permission.MANAGE_USB" tools:ignore="ProtectedPermissions" />
 
     <application
         android:allowBackup="true"
@@ -14,7 +18,13 @@
         android:theme="@style/Theme.Domotika"
         tools:targetApi="31">
 
-        <!-- Aquí declaras tu actividad principal -->
+        <!-- NUEVAS ACTIVIDADES -->
+        <activity android:name=".UsbActivity" />
+        <activity android:name=".WifiActivity" />
+        <activity android:name=".BluetoothActivity" />
+        <activity android:name=".InfraredActivity" />
+
+        <!-- ACTIVIDAD PRINCIPAL -->
         <activity android:name=".MainActivity"
             android:exported="true"
             tools:ignore="Instantiatable">

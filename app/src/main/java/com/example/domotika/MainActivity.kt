@@ -14,6 +14,7 @@ import com.google.android.material.navigation.NavigationView
 import java.text.SimpleDateFormat
 import java.util.*
 import android.graphics.Color
+import android.content.Intent
 
 class MainActivity : AppCompatActivity() {
 
@@ -80,10 +81,30 @@ class MainActivity : AppCompatActivity() {
         val cardView3 = findViewById<MaterialCardView>(R.id.cardView3)
         val cardView4 = findViewById<MaterialCardView>(R.id.cardView4)
 
+
         setLiftEffect(cardView1)
         setLiftEffect(cardView2)
         setLiftEffect(cardView3)
         setLiftEffect(cardView4)
+
+        // Abrir nueva Activity al hacer clic
+        cardView1.setOnClickListener {
+            startActivity(Intent(this, WifiActivity::class.java))
+        }
+
+        cardView2.setOnClickListener {
+            startActivity(Intent(this, BluetoothActivity::class.java))
+        }
+
+        cardView3.setOnClickListener {
+            startActivity(Intent(this, InfraredActivity::class.java))
+        }
+
+        cardView4.setOnClickListener {
+            startActivity(Intent(this, UsbActivity::class.java))
+        }
+
+
 
         // Iniciar actualización de la hora
         handler.post(updateTimeRunnable)
@@ -105,3 +126,5 @@ class MainActivity : AppCompatActivity() {
         handler.removeCallbacks(updateTimeRunnable)
     }
 }
+
+

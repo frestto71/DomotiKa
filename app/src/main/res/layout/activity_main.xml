@@ -100,7 +100,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Productos Infrarrojo"
+                            android:text="Productos Wifi"
                             android:textColor="#00FFE0"
                             android:textSize="18sp"
                             android:textStyle="bold"
@@ -134,6 +134,7 @@
                             android:paddingLeft="6dp" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
+
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/cardView2"
                     android:layout_width="match_parent"
@@ -164,7 +165,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="📡 Routers"
+                            android:text="🎧 Audífonos inalámbricos"
                             android:textColor="#ffffff"
                             android:textSize="16sp"
                             android:paddingVertical="4dp"
@@ -173,7 +174,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="💡 Luces WiFi"
+                            android:text="⌚ Reloj inteligente"
                             android:textColor="#ffffff"
                             android:textSize="16sp"
                             android:paddingVertical="4dp"
@@ -182,7 +183,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="🔐 Cerraduras WiFi"
+                            android:text="🔊 Bocina Bluetooth"
                             android:textColor="#ffffff"
                             android:textSize="16sp"
                             android:paddingVertical="4dp"
@@ -211,7 +212,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Elementos Usb"
+                            android:text="Productos Infrarrojo"
                             android:textColor="#00FFE0"
                             android:textSize="18sp"
                             android:textStyle="bold"
@@ -220,7 +221,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="📡 Routers"
+                            android:text="🖲️ Control remoto de TV"
                             android:textColor="#ffffff"
                             android:textSize="16sp"
                             android:paddingVertical="4dp"
@@ -229,7 +230,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="💡 Luces WiFi"
+                            android:text="🌡️ Termómetro infrarrojo"
                             android:textColor="#ffffff"
                             android:textSize="16sp"
                             android:paddingVertical="4dp"
@@ -238,13 +239,14 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="🔐 Cerraduras WiFi"
+                            android:text="❄️ Control de aire acondicionado"
                             android:textColor="#ffffff"
                             android:textSize="16sp"
                             android:paddingVertical="4dp"
                             android:paddingLeft="6dp" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
+
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/cardView4"
                     android:layout_width="match_parent"
@@ -266,7 +268,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Productos WiFii"
+                            android:text="Elementos Usb"
                             android:textColor="#00FFE0"
                             android:textSize="18sp"
                             android:textStyle="bold"
@@ -275,7 +277,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="📡 Routers"
+                            android:text="💾 Memoria USB"
                             android:textColor="#ffffff"
                             android:textSize="16sp"
                             android:paddingVertical="4dp"
@@ -284,7 +286,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="💡 Luces WiFi"
+                            android:text="📹 Cámara USB"
                             android:textColor="#ffffff"
                             android:textSize="16sp"
                             android:paddingVertical="4dp"
@@ -293,15 +295,13 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="🔐 Cerraduras WiFi"
+                            android:text="🌀 Ventilador USB"
                             android:textColor="#ffffff"
                             android:textSize="16sp"
                             android:paddingVertical="4dp"
                             android:paddingLeft="6dp" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
-
-
             </LinearLayout>
         </ScrollView>
     </LinearLayout>
