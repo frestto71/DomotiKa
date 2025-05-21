@@ -52,8 +52,40 @@
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
-    <!-- Área de productos o mensaje vacío -->
+    <!-- Progress indicator mientras busca dispositivos -->
+    <LinearLayout
+        android:id="@+id/scanning_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="24dp"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:indeterminateTint="#00FFE0" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Buscando dispositivos..."
+            android:textColor="#cccccc"
+            android:layout_marginTop="8dp" />
+    </LinearLayout>
+
+    <!-- Lista de dispositivos encontrados -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/bluetooth_devices_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:visibility="gone" />
+
+    <!-- Área de productos o mensaje vacío (mantenemos tu ScrollView original) -->
     <ScrollView
+        android:id="@+id/empty_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true">
