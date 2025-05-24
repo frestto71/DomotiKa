@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:fillViewport="true"
+    android:overScrollMode="ifContentScrolls"
+    android:background="#1e1e1e">
+
+    <LinearLayout
+        android:id="@+id/dialog_root_linear_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:background="#1e1e1e">
+
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Conectar Cámara WiFi"
+            android:textColor="#00FFE0"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_gravity="center"
+            android:paddingBottom="16dp" />
+
+        <EditText
+            android:id="@+id/et_ip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Dirección IP"
+            android:inputType="textUri"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#777777"
+            android:background="@drawable/edit_text_background_dark"
+            android:padding="12dp"
+            android:layout_marginBottom="12dp"
+            android:imeOptions="actionNext" />
+
+        <EditText
+            android:id="@+id/et_puerto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Puerto (ej. 554)"
+            android:inputType="number"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#777777"
+            android:background="@drawable/edit_text_background_dark"
+            android:padding="12dp"
+            android:layout_marginBottom="12dp"
+            android:imeOptions="actionNext" />
+
+        <EditText
+            android:id="@+id/et_usuario"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Usuario"
+            android:inputType="text"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#777777"
+            android:background="@drawable/edit_text_background_dark"
+            android:padding="12dp"
+            android:layout_marginBottom="12dp"
+            android:imeOptions="actionNext" />
+
+        <EditText
+            android:id="@+id/et_contrasena"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Contraseña"
+            android:inputType="textPassword"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#777777"
+            android:background="@drawable/edit_text_background_dark"
+            android:padding="12dp"
+            android:layout_marginBottom="24dp"
+            android:imeOptions="actionDone" />
+
+        <Button
+            android:id="@+id/btn_conectar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Conectar"
+            android:textStyle="bold"
+            android:backgroundTint="#00FFE0"
+            android:textColor="#000000"
+            android:padding="12dp" />
+    </LinearLayout>
+</ScrollView>
