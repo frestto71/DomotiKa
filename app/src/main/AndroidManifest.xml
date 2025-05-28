@@ -5,6 +5,7 @@
     <!-- 🔐 PERMISOS PARA USB -->
     <uses-feature android:name="android.hardware.usb.host" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <!-- 🔐 PERMISOS PARA BLUETOOTH -->
     <uses-permission android:name="android.permission.BLUETOOTH" />
@@ -13,6 +14,7 @@
     <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.TRANSMIT_IR" />
 
     <!-- PERMISO PARA INTERNET -->
     <uses-permission android:name="android.permission.INTERNET" />
@@ -34,6 +36,7 @@
         <!-- NUEVAS ACTIVIDADES -->
         <activity android:name=".UsbActivity" android:exported="true" />
         <activity android:name=".CameraPlayerActivity" />
+        <activity android:name=".InfraredControlActivity" />
 
         <activity
             android:name=".WifiActivity"
@@ -41,6 +44,16 @@
 
         <activity android:name=".BluetoothActivity" />
         <activity android:name=".InfraredActivity" />
+
+        <!-- BroadcastReceiver para controlar pausa y play desde la notificación -->
+        <receiver
+            android:name=".UsbActivity$mediaControlReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.example.domotika.ACTION_PAUSE" />
+                <action android:name="com.example.domotika.ACTION_PLAY" />
+            </intent-filter>
+        </receiver>
 
         <!-- ACTIVIDAD PRINCIPAL -->
         <activity android:name=".MainActivity"

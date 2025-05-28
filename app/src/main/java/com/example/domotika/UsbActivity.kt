@@ -1,17 +1,25 @@
 package com.example.domotika
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.*
+import android.content.pm.PackageManager
 import android.hardware.usb.UsbDevice
 import android.hardware.usb.UsbManager
 import android.media.MediaPlayer
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.provider.DocumentsContract
+import android.util.Log
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -32,10 +40,22 @@ class UsbActivity : AppCompatActivity() {
 
     private var currentSort: SortOption = SortOption.NAME
 
-    private var mediaPlayer: MediaPlayer? = null  // MediaPlayer para audio
+    private var mediaPlayer: MediaPlayer? = null
+    private var isPaused = false  // <-- Añadido para controlar estado pausa
+
+    private val CHANNEL_ID = "music_playback_channel"
+    private val NOTIFICATION_ID = 1
+    private lateinit var notificationManager: NotificationManager
+    private val handler = Handler()
+    private var updateRunnable: Runnable? = null
 
     enum class SortOption {
         NAME, SIZE, DATE
+    }
+
+    companion object {
+        const val ACTION_PAUSE = "com.example.domotika.ACTION_PAUSE"
+        const val ACTION_PLAY = "com.example.domotika.ACTION_PLAY"
     }
 
     private val usbReceiver = object : BroadcastReceiver() {
@@ -59,6 +79,31 @@ class UsbActivity : AppCompatActivity() {
         }
     }
 
+    private val mediaControlReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            val action = intent?.action
+            Log.d("UsbActivity", "Received media action: $action")
+            when (action) {
+                ACTION_PAUSE -> {
+                    if (mediaPlayer?.isPlaying == true) {
+                        mediaPlayer?.pause()
+                        isPaused = true  // <-- marca pausa
+                        showPlaybackNotification()
+                        Toast.makeText(this@UsbActivity, "Pausado", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                ACTION_PLAY -> {
+                    if (mediaPlayer != null && mediaPlayer?.isPlaying == false) {
+                        mediaPlayer?.start()
+                        isPaused = false  // <-- marca reproducción
+                        showPlaybackNotification()
+                        Toast.makeText(this@UsbActivity, "Reproduciendo", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_usb)
@@ -74,13 +119,28 @@ class UsbActivity : AppCompatActivity() {
         }
         recyclerView.adapter = adapter
 
-        registerReceiver(
-            usbReceiver,
-            IntentFilter().apply {
-                addAction(UsbManager.ACTION_USB_DEVICE_ATTACHED)
-                addAction(UsbManager.ACTION_USB_DEVICE_DETACHED)
-            }
-        )
+        notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        createNotificationChannel()
+
+        val usbIntentFilter = IntentFilter().apply {
+            addAction(UsbManager.ACTION_USB_DEVICE_ATTACHED)
+            addAction(UsbManager.ACTION_USB_DEVICE_DETACHED)
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) { // Android 12+
+            registerReceiver(usbReceiver, usbIntentFilter, Context.RECEIVER_NOT_EXPORTED)
+        } else {
+            registerReceiver(usbReceiver, usbIntentFilter)
+        }
+
+        val mediaControlFilter = IntentFilter().apply {
+            addAction(ACTION_PAUSE)
+            addAction(ACTION_PLAY)
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            registerReceiver(mediaControlReceiver, mediaControlFilter, Context.RECEIVER_EXPORTED)
+        } else {
+            registerReceiver(mediaControlReceiver, mediaControlFilter)
+        }
 
         btnSort.setOnClickListener {
             showSortOptionsDialog()
@@ -92,9 +152,97 @@ class UsbActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         unregisterReceiver(usbReceiver)
+        unregisterReceiver(mediaControlReceiver)
         mediaPlayer?.release()
         mediaPlayer = null
+        updateRunnable?.let { handler.removeCallbacks(it) }
+        notificationManager.cancel(NOTIFICATION_ID)
     }
+
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                CHANNEL_ID,
+                "Reproducción de música",
+                NotificationManager.IMPORTANCE_LOW
+            )
+            notificationManager.createNotificationChannel(channel)
+        }
+    }
+
+    private fun showPlaybackNotification() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                return
+            }
+        }
+
+        val intent = Intent(this, UsbActivity::class.java)
+        val pendingIntent = PendingIntent.getActivity(
+            this, 0, intent,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
+
+        val duration = mediaPlayer?.duration ?: 0
+        val currentPosition = mediaPlayer?.currentPosition ?: 0
+
+        val actionIntent: Intent
+        val actionPendingIntent: PendingIntent
+        val actionIcon: Int
+        val actionTitle: String
+
+        if (mediaPlayer?.isPlaying == true) {
+            actionIntent = Intent(ACTION_PAUSE)
+            actionPendingIntent = PendingIntent.getBroadcast(
+                this,
+                1,
+                actionIntent,
+                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+            )
+            actionIcon = android.R.drawable.ic_media_pause
+            actionTitle = "Pausar"
+        } else {
+            actionIntent = Intent(ACTION_PLAY)
+            actionPendingIntent = PendingIntent.getBroadcast(
+                this,
+                2,
+                actionIntent,
+                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+            )
+            actionIcon = android.R.drawable.ic_media_play
+            actionTitle = "Reproducir"
+        }
+
+        val builder = NotificationCompat.Builder(this, CHANNEL_ID)
+            .setContentTitle("Reproduciendo música")
+            .setContentText("Duración: ${duration / 1000} segundos")
+            .setSmallIcon(android.R.drawable.ic_media_play)
+            .setContentIntent(pendingIntent)
+            .setOnlyAlertOnce(true)
+            .setProgress(duration, currentPosition, false)
+            .setOngoing(true) // Siempre en curso, no se puede deslizar para eliminar
+            .setPriority(NotificationCompat.PRIORITY_LOW)
+            .addAction(actionIcon, actionTitle, actionPendingIntent)
+
+        notificationManager.notify(NOTIFICATION_ID, builder.build())
+    }
+
+    private fun startProgressUpdater() {
+        updateRunnable = object : Runnable {
+            override fun run() {
+                if (mediaPlayer != null && (mediaPlayer!!.isPlaying || isPaused)) {
+                    showPlaybackNotification()
+                    handler.postDelayed(this, 1000)
+                } else {
+                    notificationManager.cancel(NOTIFICATION_ID)
+                    handler.removeCallbacks(this)
+                }
+            }
+        }
+        handler.post(updateRunnable!!)
+    }
+
+    // --- resto de funciones (abrir carpeta, mover, renombrar, eliminar, reproducir, etc.) ---
 
     private fun openFolderSelector() {
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {
@@ -173,7 +321,6 @@ class UsbActivity : AppCompatActivity() {
                 val lastModified = it.getLong(4)
                 val isDirectory = mime == DocumentsContract.Document.MIME_TYPE_DIR
                 val childUri = DocumentsContract.buildDocumentUriUsingTree(uri, docId)
-                // PASAMOS MIME TIPO AL FILEITEM
                 files.add(UsbFileAdapter.FileItem(name, isDirectory, childUri.toString(), size, lastModified, mime))
             }
         }
@@ -199,7 +346,6 @@ class UsbActivity : AppCompatActivity() {
         val uri = Uri.parse(fileItem.uriString)
         val optionsList = mutableListOf("Eliminar archivo", "Renombrar archivo", "Mover archivo")
 
-        // Si es audio, agregamos opción reproducir
         if (fileItem.mimeType?.startsWith("audio") == true) {
             optionsList.add("Reproducir audio")
         }
@@ -229,8 +375,13 @@ class UsbActivity : AppCompatActivity() {
             mediaPlayer?.release()
             mediaPlayer = MediaPlayer().apply {
                 setDataSource(this@UsbActivity, uri)
-                setOnPreparedListener { start() }
+                setOnPreparedListener {
+                    start()
+                    showPlaybackNotification()
+                    startProgressUpdater()
+                }
                 setOnCompletionListener {
+                    notificationManager.cancel(NOTIFICATION_ID)
                     it.release()
                     mediaPlayer = null
                     Toast.makeText(this@UsbActivity, "Reproducción finalizada", Toast.LENGTH_SHORT).show()

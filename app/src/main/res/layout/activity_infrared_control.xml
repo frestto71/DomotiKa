@@ -1,0 +1,40 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:background="#1e1e1e"
+    android:padding="24dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/tv_dispositivo_nombre"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Dispositivo"
+        android:textColor="#00FFE0"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_gravity="center"
+        android:paddingBottom="24dp" />
+
+    <Button
+        android:id="@+id/btn_encender"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Encender"
+        android:backgroundTint="#00FFE0"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        android:padding="16dp"
+        android:layout_marginBottom="12dp" />
+
+    <Button
+        android:id="@+id/btn_apagar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Apagar"
+        android:backgroundTint="#ff4444"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:padding="16dp" />
+
+</LinearLayout>
