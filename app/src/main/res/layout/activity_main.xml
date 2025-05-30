@@ -16,21 +16,13 @@
 
 
         <!-- ScrollView con el contenido -->
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:layout_marginTop="30dp"
-            android:background="#FFFFFF"
-            android:titleTextColor="#064739"
-            app:title="Inicio" />
 
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:paddingLeft="30dp"
-            android:paddingTop="2dp"
+            android:paddingTop="60dp"
             android:paddingRight="30dp"
             android:paddingBottom="30dp">
 
@@ -45,27 +37,30 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="15dp"
                     android:gravity="center_vertical"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:background="@drawable/rounded_background">
 
                     <TextView
                         android:id="@+id/logoText"
+                        android:paddingLeft="10dp"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="60dp"
                         android:layout_weight="1"
                         android:letterSpacing="0.05"
                         android:text="DomotiKa"
-                        android:textColor="#09a685"
-                        android:textSize="26sp"
+                        android:textColor="#ffffff"
+                        android:textSize="40sp"
                         android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/timeText"
+                        android:paddingRight="10dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
                         android:text="Cargando..."
-                        android:textColor="#09a685"
-                        android:textSize="18sp" />
+                        android:textColor="#ffffff"
+                        android:textSize="20sp" />
                 </LinearLayout>
 
                 <TextView
@@ -93,7 +88,7 @@
                     app:cardCornerRadius="16dp">
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="395dp"
                         android:layout_height="match_parent"
                         android:orientation="vertical"
                         android:padding="16dp">

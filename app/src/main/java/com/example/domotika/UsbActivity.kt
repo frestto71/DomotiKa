@@ -265,7 +265,7 @@ class UsbActivity : AppCompatActivity() {
                             uri,
                             Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
                         )
-                        usbStatus.text = "Mostrando archivos en: ${uri.path}"
+                        usbStatus.text = "Mostrando archivos de la ruta: ${uri.path}"
                         currentRootUri = uri
                         listFilesFromUri(uri)
                     }

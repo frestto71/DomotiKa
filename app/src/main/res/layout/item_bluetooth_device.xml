@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_marginBottom="12dp"
     app:cardCornerRadius="16dp"
-    app:cardBackgroundColor="#1e1e1e"
+    app:cardBackgroundColor="#064739"
     app:cardElevation="4dp">
 
     <LinearLayout
@@ -48,8 +48,8 @@
             android:layout_height="wrap_content"
             android:text="Vincular"
             android:textSize="12sp"
-            android:textColor="#000000"
-            app:backgroundTint="#00FFE0"
+            android:textColor="#ffffff"
+            app:backgroundTint="#000000"
             app:cornerRadius="20dp"
             android:minWidth="0dp"
             android:minHeight="0dp"

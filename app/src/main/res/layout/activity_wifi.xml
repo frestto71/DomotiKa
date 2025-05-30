@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#0d0d0d"
+    android:background="#ffffff"
     android:padding="20dp">
 
     <!-- Card Encabezado -->
@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="40dp"
         app:cardCornerRadius="20dp"
         app:cardElevation="8dp"
         app:cardBackgroundColor="#1e1e1e">
@@ -29,7 +29,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="📶 Productos WiFi"
-                android:textColor="#00FFE0"
+                android:textColor="#ffffff"
                 android:textSize="26sp"
                 android:textStyle="bold"
                 android:layout_marginBottom="12dp" />
@@ -39,7 +39,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="+ Agregar producto WiFi"
-                android:textColor="#000000"
+                android:textColor="#ffffff"
                 android:textStyle="bold"
                 android:paddingStart="32dp"
                 android:paddingEnd="32dp"
@@ -47,8 +47,8 @@
                 android:paddingBottom="12dp"
                 android:layout_marginTop="4dp"
                 android:elevation="6dp"
-                app:backgroundTint="#00FFE0"
-                app:rippleColor="#2f2e2e" /> <!-- ✅ AQUÍ está el color -->
+                app:backgroundTint="#09a685"
+                app:rippleColor="#2f2e2e" />
 
 
         </LinearLayout>

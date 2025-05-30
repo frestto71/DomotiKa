@@ -20,7 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Archivo.txt"
-            android:textColor="#09a685"
+            android:textColor="#ffffff"
             android:textSize="18sp"
             android:textStyle="bold"
             android:maxLines="1"

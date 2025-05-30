@@ -10,7 +10,7 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="40dp"
         android:layout_marginBottom="24dp"
         app:cardCornerRadius="20dp"
         app:cardElevation="8dp"
@@ -28,10 +28,27 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="💾 Productos USB"
-                android:textColor="#09a685"
+                android:textColor="#ffffff"
                 android:textSize="26sp"
                 android:textStyle="bold"
                 android:layout_marginBottom="4dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_sort"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ordenar por"
+                android:textColor="#ffffff"
+                android:textStyle="bold"
+                android:paddingStart="24dp"
+                android:paddingEnd="24dp"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:layout_marginTop="8dp"
+                android:layout_gravity="center_horizontal"
+                app:backgroundTint="#09a685"
+                android:textSize="15sp"
+                app:rippleColor="#2f2e2e" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
@@ -40,9 +57,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Estado USB"
-        android:textColor="#09a685"
+        android:textColor="#000000"
         android:textSize="16sp"
-        android:padding="8dp"
+        android:padding="2dp"
+        android:layout_marginTop="-25dp"
         />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -52,22 +70,6 @@
         android:layout_weight="1"
         android:clipToPadding="false"
         android:paddingBottom="80dp" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_sort"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Ordenar por"
-        android:textColor="#000000"
-        android:textStyle="bold"
-        android:paddingStart="24dp"
-        android:paddingEnd="24dp"
-        android:paddingTop="12dp"
-        android:paddingBottom="12dp"
-        android:layout_marginTop="8dp"
-        android:layout_gravity="center_horizontal"
-        app:backgroundTint="#00FFE0"
-        app:rippleColor="#2f2e2e" />
 
 
 </LinearLayout>

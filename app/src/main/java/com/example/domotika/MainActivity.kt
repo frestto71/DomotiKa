@@ -52,18 +52,12 @@ class MainActivity : AppCompatActivity() {
         drawerLayout = findViewById(R.id.drawer_layout)
         navView = findViewById(R.id.nav_view)
 
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        setSupportActionBar(toolbar)
 
         // Configurar toggle y añadirlo al DrawerLayout
-        toggle = ActionBarDrawerToggle(this, drawerLayout, toolbar,
-            R.string.open_drawer, R.string.close_drawer)
-        drawerLayout.addDrawerListener(toggle)
-        toggle.syncState()
+
 
         // Cambiar color icono hamburguesa y título
-        toggle.drawerArrowDrawable.color = Color.parseColor("#09a685")
-        toolbar.setTitleTextColor(Color.parseColor("#09a685"))
+
 
         navView.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
