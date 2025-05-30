@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#0d0d0d"
+    android:background="#ffffff"
     android:padding="20dp">
 
     <androidx.cardview.widget.CardView
@@ -28,7 +28,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="💾 Productos USB"
-                android:textColor="#00FFE0"
+                android:textColor="#09a685"
                 android:textSize="26sp"
                 android:textStyle="bold"
                 android:layout_marginBottom="4dp" />
@@ -40,7 +40,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Estado USB"
-        android:textColor="#00FFE0"
+        android:textColor="#09a685"
         android:textSize="16sp"
         android:padding="8dp"
         />

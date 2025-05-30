@@ -1,12 +1,12 @@
 <resources>
     <!-- Tema para el diálogo compacto y moderno -->
     <style name="CustomDialogTheme" parent="ThemeOverlay.MaterialComponents.Dialog">
-        <item name="colorPrimary">#00FFE0</item>
+        <item name="colorPrimary">#064739</item>
         <item name="colorOnPrimary">#000000</item>
 
-        <item name="android:textColorPrimary">#00FFE0</item>
+        <item name="android:textColorPrimary">#064739</item>
         <item name="android:textColorSecondary">#CCCCCC</item>
-        <item name="android:textColorHighlight">#00FFC9</item>
+        <item name="android:textColorHighlight">#064739</item>
 
         <item name="android:background">@drawable/dialog_background</item>
         <item name="android:windowBackground">@drawable/dialog_background</item>

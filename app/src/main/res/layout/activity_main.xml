@@ -10,28 +10,29 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:background="#0d0d0d">
+        android:background="#ffffff">
 
         <!-- Toolbar -->
+
+
+        <!-- ScrollView con el contenido -->
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="#0d0d0d"
-            android:titleTextColor="#00FFE0"
             android:layout_marginTop="30dp"
+            android:background="#FFFFFF"
+            android:titleTextColor="#064739"
             app:title="Inicio" />
 
-
-        <!-- ScrollView con el contenido -->
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:paddingLeft="30dp"
+            android:paddingTop="2dp"
             android:paddingRight="30dp"
-            android:paddingBottom="30dp"
-            android:paddingTop="2dp">
+            android:paddingBottom="30dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -42,113 +43,113 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
+                    android:layout_marginBottom="15dp"
                     android:gravity="center_vertical"
-                    android:layout_marginBottom="15dp">
+                    android:orientation="horizontal">
 
                     <TextView
                         android:id="@+id/logoText"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:letterSpacing="0.05"
                         android:text="DomotiKa"
+                        android:textColor="#09a685"
                         android:textSize="26sp"
-                        android:textStyle="bold"
-                        android:textColor="#00FFE0"
-                        android:letterSpacing="0.05" />
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/timeText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="#00FFE0"
-                        android:textSize="18sp"
                         android:layout_marginStart="12dp"
-                        android:text="Cargando..." />
+                        android:text="Cargando..."
+                        android:textColor="#09a685"
+                        android:textSize="18sp" />
                 </LinearLayout>
 
                 <TextView
                     android:id="@+id/subtitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
                     android:text="Selecciona el tipo"
+                    android:textColor="#09a685"
                     android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:textColor="#00FFE0"
-                    android:layout_marginBottom="16dp" />
+                    android:textStyle="bold" />
 
                 <!-- Tarjetas (MaterialCardView) aquí, manteniendo tu diseño -->
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/cardView1"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="20dp"
-                    android:elevation="5dp"
                     android:clickable="true"
+                    android:elevation="5dp"
                     android:focusable="true"
                     android:foreground="@drawable/card_touch_feedback"
-                    app:cardCornerRadius="16dp"
-                    app:cardBackgroundColor="#1e1e1e">
+                    app:cardBackgroundColor="#064739"
+                    app:cardCornerRadius="16dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:orientation="vertical"
                         android:padding="16dp">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginBottom="10dp"
                             android:text="Productos Wifi"
-                            android:textColor="#00FFE0"
+                            android:textColor="#09a685"
                             android:textSize="18sp"
-                            android:textStyle="bold"
-                            android:layout_marginBottom="10dp" />
+                            android:textStyle="bold" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:paddingVertical="4dp"
+                            android:paddingLeft="6dp"
                             android:text="📡 Routers"
                             android:textColor="#ffffff"
-                            android:textSize="16sp"
-                            android:paddingVertical="4dp"
-                            android:paddingLeft="6dp" />
+                            android:textSize="16sp" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:paddingVertical="4dp"
+                            android:paddingLeft="6dp"
                             android:text="💡 Luces WiFi"
                             android:textColor="#ffffff"
-                            android:textSize="16sp"
-                            android:paddingVertical="4dp"
-                            android:paddingLeft="6dp" />
+                            android:textSize="16sp" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:paddingVertical="4dp"
+                            android:paddingLeft="6dp"
                             android:text="🔐 Cerraduras WiFi"
                             android:textColor="#ffffff"
-                            android:textSize="16sp"
-                            android:paddingVertical="4dp"
-                            android:paddingLeft="6dp" />
+                            android:textSize="16sp" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/cardView2"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="20dp"
-                    android:elevation="5dp"
                     android:clickable="true"
+                    android:elevation="5dp"
                     android:focusable="true"
                     android:foreground="@drawable/card_touch_feedback"
-                    app:cardCornerRadius="16dp"
-                    app:cardBackgroundColor="#1e1e1e">
+                    app:cardBackgroundColor="#064739"
+                    app:cardCornerRadius="16dp">
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="400dp"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:padding="16dp">
@@ -156,55 +157,55 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginBottom="10dp"
                             android:text="Productos Bluetooth"
-                            android:textColor="#00FFE0"
+                            android:textColor="#09a685"
                             android:textSize="18sp"
-                            android:textStyle="bold"
-                            android:layout_marginBottom="10dp" />
+                            android:textStyle="bold" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:paddingVertical="4dp"
+                            android:paddingLeft="6dp"
                             android:text="🎧 Audífonos inalámbricos"
                             android:textColor="#ffffff"
-                            android:textSize="16sp"
-                            android:paddingVertical="4dp"
-                            android:paddingLeft="6dp" />
+                            android:textSize="16sp" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:paddingVertical="4dp"
+                            android:paddingLeft="6dp"
                             android:text="⌚ Reloj inteligente"
                             android:textColor="#ffffff"
-                            android:textSize="16sp"
-                            android:paddingVertical="4dp"
-                            android:paddingLeft="6dp" />
+                            android:textSize="16sp" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:paddingVertical="4dp"
+                            android:paddingLeft="6dp"
                             android:text="🔊 Bocina Bluetooth"
                             android:textColor="#ffffff"
-                            android:textSize="16sp"
-                            android:paddingVertical="4dp"
-                            android:paddingLeft="6dp" />
+                            android:textSize="16sp" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/cardView3"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="20dp"
-                    android:elevation="5dp"
                     android:clickable="true"
+                    android:elevation="5dp"
                     android:focusable="true"
                     android:foreground="@drawable/card_touch_feedback"
-                    app:cardCornerRadius="16dp"
-                    app:cardBackgroundColor="#1e1e1e">
+                    app:cardBackgroundColor="#064739"
+                    app:cardCornerRadius="16dp">
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="398dp"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:padding="16dp">
@@ -212,94 +213,94 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginBottom="10dp"
                             android:text="Productos Infrarrojo"
-                            android:textColor="#00FFE0"
+                            android:textColor="#09a685"
                             android:textSize="18sp"
-                            android:textStyle="bold"
-                            android:layout_marginBottom="10dp" />
+                            android:textStyle="bold" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:paddingVertical="4dp"
+                            android:paddingLeft="6dp"
                             android:text="🖲️ Control remoto de TV"
                             android:textColor="#ffffff"
-                            android:textSize="16sp"
-                            android:paddingVertical="4dp"
-                            android:paddingLeft="6dp" />
+                            android:textSize="16sp" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:paddingVertical="4dp"
+                            android:paddingLeft="6dp"
                             android:text="🌡️ Termómetro infrarrojo"
                             android:textColor="#ffffff"
-                            android:textSize="16sp"
-                            android:paddingVertical="4dp"
-                            android:paddingLeft="6dp" />
+                            android:textSize="16sp" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:paddingVertical="4dp"
+                            android:paddingLeft="6dp"
                             android:text="❄️ Control de aire acondicionado"
                             android:textColor="#ffffff"
-                            android:textSize="16sp"
-                            android:paddingVertical="4dp"
-                            android:paddingLeft="6dp" />
+                            android:textSize="16sp" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/cardView4"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="20dp"
-                    android:elevation="5dp"
                     android:clickable="true"
+                    android:elevation="5dp"
                     android:focusable="true"
                     android:foreground="@drawable/card_touch_feedback"
-                    app:cardCornerRadius="16dp"
-                    app:cardBackgroundColor="#1e1e1e">
+                    app:cardBackgroundColor="#064739"
+                    app:cardCornerRadius="16dp">
 
                     <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_width="400dp"
+                        android:layout_height="match_parent"
                         android:orientation="vertical"
                         android:padding="16dp">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginBottom="10dp"
                             android:text="Elementos Usb"
-                            android:textColor="#00FFE0"
+                            android:textColor="#09a685"
                             android:textSize="18sp"
-                            android:textStyle="bold"
-                            android:layout_marginBottom="10dp" />
+                            android:textStyle="bold" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:paddingVertical="4dp"
+                            android:paddingLeft="6dp"
                             android:text="💾 Memoria USB"
                             android:textColor="#ffffff"
-                            android:textSize="16sp"
-                            android:paddingVertical="4dp"
-                            android:paddingLeft="6dp" />
+                            android:textSize="16sp" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:paddingVertical="4dp"
+                            android:paddingLeft="6dp"
                             android:text="📹 Cámara USB"
                             android:textColor="#ffffff"
-                            android:textSize="16sp"
-                            android:paddingVertical="4dp"
-                            android:paddingLeft="6dp" />
+                            android:textSize="16sp" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:paddingVertical="4dp"
+                            android:paddingLeft="6dp"
                             android:text="🌀 Ventilador USB"
                             android:textColor="#ffffff"
-                            android:textSize="16sp"
-                            android:paddingVertical="4dp"
-                            android:paddingLeft="6dp" />
+                            android:textSize="16sp" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
             </LinearLayout>

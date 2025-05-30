@@ -62,8 +62,8 @@ class MainActivity : AppCompatActivity() {
         toggle.syncState()
 
         // Cambiar color icono hamburguesa y título
-        toggle.drawerArrowDrawable.color = Color.parseColor("#00FFE0")
-        toolbar.setTitleTextColor(Color.parseColor("#00FFE0"))
+        toggle.drawerArrowDrawable.color = Color.parseColor("#09a685")
+        toolbar.setTitleTextColor(Color.parseColor("#09a685"))
 
         navView.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {

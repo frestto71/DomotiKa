@@ -7,7 +7,7 @@
     android:layout_marginTop="4dp"
     card_view:cardCornerRadius="16dp"
     card_view:cardElevation="6dp"
-    card_view:cardBackgroundColor="#1e1e1e">
+    card_view:cardBackgroundColor="#064739">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,7 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Archivo.txt"
-            android:textColor="#FF8C00"
+            android:textColor="#09a685"
             android:textSize="18sp"
             android:textStyle="bold"
             android:maxLines="1"
