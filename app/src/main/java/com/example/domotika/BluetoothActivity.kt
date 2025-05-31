@@ -23,8 +23,6 @@ import com.google.android.material.button.MaterialButton
 import android.app.Dialog
 import android.os.Handler
 import android.os.Looper
-import android.view.animation.AnimationUtils
-import android.widget.ImageView
 
 class BluetoothActivity : AppCompatActivity(), BluetoothDeviceAdapter.OnDeviceClickListener {
 
@@ -62,15 +60,11 @@ class BluetoothActivity : AppCompatActivity(), BluetoothDeviceAdapter.OnDeviceCl
         // Obtener adaptador Bluetooth
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
         if (bluetoothAdapter == null) {
-            // El dispositivo no soporta Bluetooth
             Toast.makeText(this, "Este dispositivo no soporta Bluetooth", Toast.LENGTH_LONG).show()
             emptyMessageText.text = "Bluetooth no disponible en este dispositivo."
             btnAddBluetooth.isEnabled = false
             return
         }
-
-        // Configurar botón para buscar dispositivos
-        btnAddBluetooth.setOnClickListener { startBluetoothDiscovery() }
 
         // Registrar receptor para descubrimiento de dispositivos
         val filter = IntentFilter().apply {
@@ -80,22 +74,28 @@ class BluetoothActivity : AppCompatActivity(), BluetoothDeviceAdapter.OnDeviceCl
         }
         registerReceiver(bluetoothReceiver, filter)
 
-        // Verificar si Bluetooth está habilitado
-        checkBluetoothEnabled()
+        // Configurar botón para búsqueda (por si quiere reiniciar búsqueda)
+        btnAddBluetooth.setOnClickListener { startBluetoothDiscovery() }
+
+        // Aquí llamamos a la función que chequea permisos y comienza descubrimiento si puede
+        checkPermissionsAndStartDiscovery()
     }
 
-    private fun checkBluetoothEnabled() {
-        if (bluetoothAdapter?.isEnabled == false) {
-            val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
-            if (ActivityCompat.checkSelfPermission(
-                    this,
-                    Manifest.permission.BLUETOOTH_CONNECT
-                ) != PackageManager.PERMISSION_GRANTED
+    private fun checkPermissionsAndStartDiscovery() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED ||
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED
             ) {
                 requestBluetoothPermissions()
-                return
+            } else {
+                startBluetoothDiscovery()
             }
-            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT)
+        } else {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                requestBluetoothPermissions()
+            } else {
+                startBluetoothDiscovery()
+            }
         }
     }
 
@@ -124,40 +124,25 @@ class BluetoothActivity : AppCompatActivity(), BluetoothDeviceAdapter.OnDeviceCl
     }
 
     private fun startBluetoothDiscovery() {
-        // Verificar permisos
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            if (ActivityCompat.checkSelfPermission(
-                    this,
-                    Manifest.permission.BLUETOOTH_SCAN
-                ) != PackageManager.PERMISSION_GRANTED ||
-                ActivityCompat.checkSelfPermission(
-                    this,
-                    Manifest.permission.BLUETOOTH_CONNECT
-                ) != PackageManager.PERMISSION_GRANTED
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED ||
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED
             ) {
                 requestBluetoothPermissions()
                 return
             }
-        } else if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
+        } else if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             requestBluetoothPermissions()
             return
         }
 
-        // Cancelar descubrimiento previo si existe
         if (bluetoothAdapter.isDiscovering) {
             bluetoothAdapter.cancelDiscovery()
         }
 
-        // Limpiar lista y mostrar indicador de carga
         discoveredDevices.clear()
         deviceAdapter.updateDevices(ArrayList())
         showScanningUI()
-
-        // Iniciar descubrimiento
         bluetoothAdapter.startDiscovery()
     }
 
@@ -180,25 +165,15 @@ class BluetoothActivity : AppCompatActivity(), BluetoothDeviceAdapter.OnDeviceCl
     }
 
     override fun onDeviceClick(device: BluetoothDevice) {
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.BLUETOOTH_CONNECT
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
             requestBluetoothPermissions()
             return
         }
 
-        // Crear diálogo personalizado desde cero sin depender de un layout existente
         val dialog = Dialog(this)
         dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
         dialog.setCancelable(false)
 
-        // Inflar un layout simple para el diálogo
-        val contentView = layoutInflater.inflate(R.layout.activity_bluetooth, null)
-        dialog.setContentView(contentView)
-
-        // Crear elementos básicos para el diálogo
         val deviceNameTextView = TextView(this)
         deviceNameTextView.text = "Conectando con ${device.name ?: "Dispositivo Bluetooth"}"
         deviceNameTextView.textSize = 18f
@@ -209,7 +184,6 @@ class BluetoothActivity : AppCompatActivity(), BluetoothDeviceAdapter.OnDeviceCl
         statusTextView.textSize = 14f
         statusTextView.setTextColor(resources.getColor(android.R.color.darker_gray))
 
-        // Agregar botón de cancelar
         val cancelButton = MaterialButton(this)
         cancelButton.text = "Cancelar"
         cancelButton.setOnClickListener {
@@ -217,7 +191,6 @@ class BluetoothActivity : AppCompatActivity(), BluetoothDeviceAdapter.OnDeviceCl
             Toast.makeText(this, "Conexión cancelada", Toast.LENGTH_SHORT).show()
         }
 
-        // Crear el layout manualmente y agregar vistas
         val dialogLayout = LinearLayout(this)
         dialogLayout.orientation = LinearLayout.VERTICAL
         dialogLayout.setPadding(32, 32, 32, 32)
@@ -225,13 +198,9 @@ class BluetoothActivity : AppCompatActivity(), BluetoothDeviceAdapter.OnDeviceCl
         dialogLayout.addView(statusTextView)
         dialogLayout.addView(cancelButton)
 
-        // Establecer el layout como contenido del diálogo
         dialog.setContentView(dialogLayout)
-
-        // Mostrar el diálogo
         dialog.show()
 
-        // Simulación de conexión
         val handler = Handler(Looper.getMainLooper())
         handler.postDelayed({
             statusTextView.text = "Estableciendo vínculo..."
@@ -243,11 +212,7 @@ class BluetoothActivity : AppCompatActivity(), BluetoothDeviceAdapter.OnDeviceCl
 
         handler.postDelayed({
             dialog.dismiss()
-            Toast.makeText(
-                this,
-                "¡${device.name ?: "Dispositivo"} conectado con éxito!",
-                Toast.LENGTH_SHORT
-            ).show()
+            Toast.makeText(this, "¡${device.name ?: "Dispositivo"} conectado con éxito!", Toast.LENGTH_SHORT).show()
         }, 4500)
     }
 
@@ -256,9 +221,7 @@ class BluetoothActivity : AppCompatActivity(), BluetoothDeviceAdapter.OnDeviceCl
             val action = intent.action
 
             when (action) {
-                BluetoothAdapter.ACTION_DISCOVERY_STARTED -> {
-                    showScanningUI()
-                }
+                BluetoothAdapter.ACTION_DISCOVERY_STARTED -> showScanningUI()
                 BluetoothAdapter.ACTION_DISCOVERY_FINISHED -> {
                     if (discoveredDevices.isEmpty()) {
                         showEmptyView()
@@ -268,19 +231,13 @@ class BluetoothActivity : AppCompatActivity(), BluetoothDeviceAdapter.OnDeviceCl
                     }
                 }
                 BluetoothDevice.ACTION_FOUND -> {
-                    // Se encontró un dispositivo
                     val device: BluetoothDevice? = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
                     if (device != null && !discoveredDevices.contains(device)) {
-                        if (ActivityCompat.checkSelfPermission(
-                                context,
-                                Manifest.permission.BLUETOOTH_CONNECT
-                            ) != PackageManager.PERMISSION_GRANTED
-                        ) {
+                        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
                             return
                         }
                         discoveredDevices.add(device)
-                        val deviceList = ArrayList(discoveredDevices)
-                        deviceAdapter.updateDevices(deviceList)
+                        deviceAdapter.updateDevices(ArrayList(discoveredDevices))
                         showDevicesList()
                     }
                 }
@@ -292,30 +249,22 @@ class BluetoothActivity : AppCompatActivity(), BluetoothDeviceAdapter.OnDeviceCl
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_ENABLE_BT) {
             if (resultCode == RESULT_OK) {
-                // Bluetooth activado, podemos proceder
                 Toast.makeText(this, "Bluetooth activado correctamente", Toast.LENGTH_SHORT).show()
+                startBluetoothDiscovery()  // empezar búsqueda si se activó Bluetooth
             } else {
-                // Usuario rechazó activar Bluetooth
                 Toast.makeText(this, "La función Bluetooth es necesaria para esta característica", Toast.LENGTH_LONG).show()
                 emptyMessageText.text = "Bluetooth desactivado. Por favor, actívelo para buscar dispositivos."
             }
         }
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == REQUEST_PERMISSIONS) {
             val allGranted = grantResults.all { it == PackageManager.PERMISSION_GRANTED }
-
             if (allGranted) {
-                // Permisos concedidos, podemos proceder
                 startBluetoothDiscovery()
             } else {
-                // Permisos denegados
                 Toast.makeText(this, "Los permisos son necesarios para utilizar esta característica", Toast.LENGTH_LONG).show()
             }
         }
@@ -323,13 +272,8 @@ class BluetoothActivity : AppCompatActivity(), BluetoothDeviceAdapter.OnDeviceCl
 
     override fun onDestroy() {
         super.onDestroy()
-        // Cancelar descubrimiento y desregistrar receptor
-        if (bluetoothAdapter?.isDiscovering == true) {
-            if (ActivityCompat.checkSelfPermission(
-                    this,
-                    Manifest.permission.BLUETOOTH_SCAN
-                ) == PackageManager.PERMISSION_GRANTED
-            ) {
+        if (bluetoothAdapter.isDiscovering) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN) == PackageManager.PERMISSION_GRANTED) {
                 bluetoothAdapter.cancelDiscovery()
             }
         }
