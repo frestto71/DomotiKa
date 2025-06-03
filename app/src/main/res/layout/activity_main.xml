@@ -54,7 +54,7 @@
                     android:letterSpacing="0.06"
                     android:text="DomotiKa"
                     android:textColor="#ffffff"
-                    android:textSize="30sp"
+                    android:textSize="31sp"
                     android:textStyle="bold"
                     android:fontFamily="sans-serif-medium" />
 
