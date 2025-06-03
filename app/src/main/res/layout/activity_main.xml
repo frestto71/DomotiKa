@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:background="@drawable/bg_fade"
+        android:background="#000000"
         android:paddingTop="10dp"
         android:paddingBottom="10dp">
 
@@ -54,7 +54,7 @@
                     android:letterSpacing="0.06"
                     android:text="DomotiKa"
                     android:textColor="#ffffff"
-                    android:textSize="35sp"
+                    android:textSize="30sp"
                     android:textStyle="bold"
                     android:fontFamily="sans-serif-medium" />
 

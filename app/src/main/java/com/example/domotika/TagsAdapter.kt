@@ -9,13 +9,13 @@ import androidx.recyclerview.widget.RecyclerView
 class TagsAdapter(private val tags: List<NfcActivity.NfcTag>) : RecyclerView.Adapter<TagsAdapter.TagViewHolder>() {
 
     class TagViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val idText: TextView = view.findViewById(android.R.id.text1)
-        val contentText: TextView = view.findViewById(android.R.id.text2)
+        val idText: TextView = view.findViewById(R.id.text_id)
+        val contentText: TextView = view.findViewById(R.id.text_content)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TagViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(android.R.layout.simple_list_item_2, parent, false)
+            .inflate(R.layout.item_tag, parent, false)
         return TagViewHolder(view)
     }
 
