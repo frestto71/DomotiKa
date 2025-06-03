@@ -1,6 +1,8 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/wifiContainer"
+    android:id="@+id/nfcContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -28,17 +30,17 @@
                 android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="📶 Productos WiFi"
+                android:text="📳 Productos NFC"
                 android:textColor="#ffffff"
                 android:textSize="26sp"
                 android:textStyle="bold"
                 android:layout_marginBottom="12dp" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_add_wifi"
+                android:id="@+id/btn_clear_tags"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="+ Agregar producto WiFi"
+                android:text="🧹 Limpiar etiquetas"
                 android:textColor="#ffffff"
                 android:textStyle="bold"
                 android:paddingStart="32dp"
@@ -50,33 +52,16 @@
                 app:backgroundTint="#09a685"
                 app:rippleColor="#2f2e2e" />
 
-
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
-    <!-- Área de productos o mensaje vacío -->
-    <ScrollView
+    <!-- RecyclerView para mostrar etiquetas NFC detectadas -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_tags"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:paddingTop="24dp"
+        android:paddingBottom="24dp" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:paddingTop="80dp"
-            android:paddingBottom="80dp">
-
-            <TextView
-                android:id="@+id/empty_message"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Aún no hay productos agregados."
-                android:textSize="16sp"
-                android:textColor="#cccccc"
-                android:gravity="center"
-                android:alpha="0.5" />
-        </LinearLayout>
-    </ScrollView>
 </LinearLayout>

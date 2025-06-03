@@ -12,11 +12,18 @@
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
     <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
+
+    <!-- PERMISOS PARA WIFI Y RED -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.TRANSMIT_IR" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- Para Android 13+, acceso a dispositivos wifi cercanos -->
+    <uses-permission android:name="android.permission.NEARBY_WIFI_DEVICES" tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.NFC" />
+    <uses-feature android:name="android.hardware.nfc" android:required="true" />
 
-    <!-- PERMISO PARA INTERNET -->
+    <!-- INTERNET -->
     <uses-permission android:name="android.permission.INTERNET" />
 
     <uses-feature android:name="android.hardware.bluetooth" android:required="true" />
@@ -33,19 +40,15 @@
         android:theme="@style/Theme.Domotika"
         tools:targetApi="31">
 
-        <!-- NUEVAS ACTIVIDADES -->
+        <!-- ACTIVIDADES -->
         <activity android:name=".UsbActivity" android:exported="true" />
         <activity android:name=".CameraPlayerActivity" />
         <activity android:name=".InfraredControlActivity" />
-
-        <activity
-            android:name=".WifiActivity"
-            android:windowSoftInputMode="adjustResize" />
-
         <activity android:name=".BluetoothActivity" />
         <activity android:name=".InfraredActivity" />
+        <activity android:name=".NfcActivity" />
 
-        <!-- BroadcastReceiver para controlar pausa y play desde la notificación -->
+        <!-- BroadcastReceiver para notificaciones -->
         <receiver
             android:name=".UsbActivity$mediaControlReceiver"
             android:exported="true">

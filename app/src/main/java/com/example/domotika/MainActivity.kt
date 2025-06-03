@@ -83,7 +83,7 @@ class MainActivity : AppCompatActivity() {
 
         // Abrir nueva Activity al hacer clic
         cardView1.setOnClickListener {
-            startActivity(Intent(this, WifiActivity::class.java))
+            startActivity(Intent(this, NfcActivity::class.java))
         }
 
         cardView2.setOnClickListener {
