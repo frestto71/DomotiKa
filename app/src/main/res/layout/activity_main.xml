@@ -10,12 +10,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:background="#000000"
+        android:background="#121212"
         android:paddingTop="10dp"
         android:paddingBottom="10dp">
 
-
-    <!-- Contenido principal (ScrollView) -->
+        <!-- Contenido principal (ScrollView) -->
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -24,373 +23,370 @@
             android:paddingTop="40dp"
             android:paddingRight="30dp"
             android:paddingBottom="10dp"
-        android:overScrollMode="always"
-        android:scrollbarStyle="insideOverlay">
+            android:overScrollMode="always"
+            android:scrollbarStyle="insideOverlay">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <!-- Título y hora con fondo degradado y sombra -->
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="70dp"
-                android:layout_marginBottom="20dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingStart="20dp"
-                android:paddingEnd="20dp"
-                android:background="@drawable/bg_header_gradient"
-                android:elevation="8dp"
-                android:clipToPadding="false"
-                android:layout_marginTop="10dp">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!-- Título y hora con fondo degradado y sombra ligera -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp"
+                    android:layout_marginBottom="20dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
+                    android:background="@drawable/bg_header_gradient"
+                    android:elevation="4dp"
+                    android:clipToPadding="false"
+                    android:layout_marginTop="10dp">
+
+                    <TextView
+                        android:id="@+id/logoText"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:letterSpacing="0.06"
+                        android:text="DomotiKa"
+                        android:textColor="#ffffff"
+                        android:textSize="31sp"
+                        android:textStyle="bold"
+                        android:fontFamily="sans-serif-medium" />
+
+                    <TextView
+                        android:id="@+id/timeText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:text="Cargando..."
+                        android:textColor="#b2dfdb"
+                        android:textSize="20sp"
+                        android:fontFamily="sans-serif" />
+                </LinearLayout>
 
                 <TextView
-                    android:id="@+id/logoText"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:letterSpacing="0.06"
-                    android:text="DomotiKa"
-                    android:textColor="#ffffff"
-                    android:textSize="31sp"
-                    android:textStyle="bold"
-                    android:fontFamily="sans-serif-medium" />
-
-                <TextView
-                    android:id="@+id/timeText"
+                    android:id="@+id/subtitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:text="Cargando..."
-                    android:textColor="#b2dfdb"
-                    android:textSize="20sp"
-                    android:fontFamily="sans-serif" />
-            </LinearLayout>
+                    android:layout_marginBottom="20dp"
+                    android:text="Lista en Favoritos"
+                    android:textColor="#B0B0B0"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif-medium"
+                    android:layout_marginStart="10dp" />
 
-            <TextView
-                android:id="@+id/subtitle"
+                <!-- Aquí puedes agregar más contenido -->
+
+            </LinearLayout>
+        </ScrollView>
+
+        <!-- Footer fijo con tarjetas más pequeñas -->
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fillViewport="true"
+            android:scrollbars="none"
+            android:padding="8dp"
+            android:layout_marginBottom="20dp">
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:text="Lista en Favoritos 🩷"
-                android:textColor="#00796b"
-                android:textSize="22sp"
-                android:textStyle="bold"
-                android:fontFamily="sans-serif-medium"
-                android:layout_marginStart="10dp" />
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:divider="?android:attr/dividerHorizontal"
+                android:showDividers="middle"
+                android:dividerPadding="6dp">
 
-            <!-- Aquí puedes agregar más contenido -->
-
-        </LinearLayout>
-    </ScrollView>
-
-    <!-- Footer fijo con las tarjetas más pequeñas -->
-    <HorizontalScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fillViewport="true"
-        android:scrollbars="none"
-        android:padding="8dp"
-        android:layout_marginBottom="20dp">  <!-- Margen negativo para subir -->
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:divider="?android:attr/dividerHorizontal"
-            android:showDividers="middle"
-            android:dividerPadding="6dp">
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardView5"
-                android:layout_width="160dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
-                android:clickable="true"
-                android:elevation="4dp"
-                android:focusable="true"
-                android:foreground="?attr/selectableItemBackground"
-                app:cardBackgroundColor="#064739"
-                app:cardCornerRadius="8dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardView5"
+                    android:layout_width="160dp"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="12dp">
+                    android:layout_marginEnd="10dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    app:cardBackgroundColor="#064739"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="2dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="6dp"
-                        android:text="WIFI"
-                        android:textColor="#09a685"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
+                        android:orientation="vertical"
+                        android:padding="12dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="📷 Camaras"
-                        android:textColor="#ffffff"
-                        android:textSize="14sp"
-                        android:paddingBottom="2dp"
-                        android:paddingStart="4dp" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="6dp"
+                            android:text="WIFI"
+                            android:textColor="#09a685"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="🔒 Cerraduras"
-                        android:textColor="#ffffff"
-                        android:textSize="14sp"
-                        android:paddingBottom="2dp"
-                        android:paddingStart="4dp" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="📷 Cámaras"
+                            android:textColor="#ffffff"
+                            android:textSize="14sp"
+                            android:paddingBottom="2dp"
+                            android:paddingStart="4dp" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="💡 Focos"
-                        android:textColor="#ffffff"
-                        android:textSize="14sp"
-                        android:paddingStart="4dp" />
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="🔒 Cerraduras"
+                            android:textColor="#ffffff"
+                            android:textSize="14sp"
+                            android:paddingBottom="2dp"
+                            android:paddingStart="4dp" />
 
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="💡 Focos"
+                            android:textColor="#ffffff"
+                            android:textSize="14sp"
+                            android:paddingStart="4dp" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardView1"
-                android:layout_width="160dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
-                android:clickable="true"
-                android:elevation="4dp"
-                android:focusable="true"
-                android:foreground="?attr/selectableItemBackground"
-                app:cardBackgroundColor="#064739"
-                app:cardCornerRadius="8dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardView1"
+                    android:layout_width="160dp"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="12dp">
+                    android:layout_marginEnd="10dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    app:cardBackgroundColor="#064739"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="2dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="6dp"
-                        android:text="NFC - RFID"
-                        android:textColor="#09a685"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
+                        android:orientation="vertical"
+                        android:padding="12dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="📳 Etiquetas NFC"
-                        android:textColor="#ffffff"
-                        android:textSize="14sp"
-                        android:paddingBottom="2dp"
-                        android:paddingStart="4dp" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="6dp"
+                            android:text="NFC - RFID"
+                            android:textColor="#09a685"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="🔑 Llaveros NFC"
-                        android:textColor="#ffffff"
-                        android:textSize="14sp"
-                        android:paddingBottom="2dp"
-                        android:paddingStart="4dp" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="📳 Etiquetas NFC"
+                            android:textColor="#ffffff"
+                            android:textSize="14sp"
+                            android:paddingBottom="2dp"
+                            android:paddingStart="4dp" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="🎫 Tarjetas NFC"
-                        android:textColor="#ffffff"
-                        android:textSize="14sp"
-                        android:paddingStart="4dp" />
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="🔑 Llaveros NFC"
+                            android:textColor="#ffffff"
+                            android:textSize="14sp"
+                            android:paddingBottom="2dp"
+                            android:paddingStart="4dp" />
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardView2"
-                android:layout_width="160dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
-                android:clickable="true"
-                android:elevation="4dp"
-                android:focusable="true"
-                android:foreground="?attr/selectableItemBackground"
-                app:cardBackgroundColor="#064739"
-                app:cardCornerRadius="8dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="🎫 Tarjetas NFC"
+                            android:textColor="#ffffff"
+                            android:textSize="14sp"
+                            android:paddingStart="4dp" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardView2"
+                    android:layout_width="160dp"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="12dp">
+                    android:layout_marginEnd="10dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    app:cardBackgroundColor="#064739"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="2dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="6dp"
-                        android:text="Bluetooth"
-                        android:textColor="#09a685"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
+                        android:orientation="vertical"
+                        android:padding="12dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="🎧 Audífonos"
-                        android:textColor="#ffffff"
-                        android:textSize="14sp"
-                        android:paddingBottom="2dp"
-                        android:paddingStart="4dp" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="6dp"
+                            android:text="Bluetooth"
+                            android:textColor="#09a685"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="⌚ Reloj inteligente"
-                        android:textColor="#ffffff"
-                        android:textSize="14sp"
-                        android:paddingBottom="2dp"
-                        android:paddingStart="4dp" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="🎧 Audífonos"
+                            android:textColor="#ffffff"
+                            android:textSize="14sp"
+                            android:paddingBottom="2dp"
+                            android:paddingStart="4dp" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="🔊 Bocina Bluetooth"
-                        android:textColor="#ffffff"
-                        android:textSize="14sp"
-                        android:paddingStart="4dp" />
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="⌚ Reloj inteligente"
+                            android:textColor="#ffffff"
+                            android:textSize="14sp"
+                            android:paddingBottom="2dp"
+                            android:paddingStart="4dp" />
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardView3"
-                android:layout_width="160dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
-                android:clickable="true"
-                android:elevation="4dp"
-                android:focusable="true"
-                android:foreground="?attr/selectableItemBackground"
-                app:cardBackgroundColor="#064739"
-                app:cardCornerRadius="8dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="🔊 Bocina Bluetooth"
+                            android:textColor="#ffffff"
+                            android:textSize="14sp"
+                            android:paddingStart="4dp" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardView3"
+                    android:layout_width="160dp"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="12dp">
+                    android:layout_marginEnd="10dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    app:cardBackgroundColor="#064739"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="2dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="6dp"
-                        android:text="Infrarrojo"
-                        android:textColor="#09a685"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
+                        android:orientation="vertical"
+                        android:padding="12dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="🖲️ Control remoto"
-                        android:textColor="#ffffff"
-                        android:textSize="14sp"
-                        android:paddingBottom="2dp"
-                        android:paddingStart="4dp" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="6dp"
+                            android:text="Infrarrojo"
+                            android:textColor="#09a685"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="🌡️ Termómetro"
-                        android:textColor="#ffffff"
-                        android:textSize="14sp"
-                        android:paddingBottom="2dp"
-                        android:paddingStart="4dp" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="🖲️ Control remoto"
+                            android:textColor="#ffffff"
+                            android:textSize="14sp"
+                            android:paddingBottom="2dp"
+                            android:paddingStart="4dp" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="❄️ A/C"
-                        android:textColor="#ffffff"
-                        android:textSize="14sp"
-                        android:paddingStart="4dp" />
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="🌡️ Termómetro"
+                            android:textColor="#ffffff"
+                            android:textSize="14sp"
+                            android:paddingBottom="2dp"
+                            android:paddingStart="4dp" />
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardView4"
-                android:layout_width="160dp"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:elevation="4dp"
-                android:focusable="true"
-                android:foreground="?attr/selectableItemBackground"
-                app:cardBackgroundColor="#064739"
-                app:cardCornerRadius="8dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="❄️ A/C"
+                            android:textColor="#ffffff"
+                            android:textSize="14sp"
+                            android:paddingStart="4dp" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardView4"
+                    android:layout_width="160dp"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="12dp">
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    app:cardBackgroundColor="#064739"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="2dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="6dp"
-                        android:text="Elementos Usb"
-                        android:textColor="#09a685"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
+                        android:orientation="vertical"
+                        android:padding="12dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="💾 Memoria USB"
-                        android:textColor="#ffffff"
-                        android:textSize="14sp"
-                        android:paddingBottom="2dp"
-                        android:paddingStart="4dp" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="6dp"
+                            android:text="Elementos USB"
+                            android:textColor="#09a685"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="📹 Cámara USB"
-                        android:textColor="#ffffff"
-                        android:textSize="14sp"
-                        android:paddingBottom="2dp"
-                        android:paddingStart="4dp" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="💾 Memoria USB"
+                            android:textColor="#ffffff"
+                            android:textSize="14sp"
+                            android:paddingBottom="2dp"
+                            android:paddingStart="4dp" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="🌀 Ventilador USB"
-                        android:textColor="#ffffff"
-                        android:textSize="14sp"
-                        android:paddingStart="4dp" />
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-        </LinearLayout>
-    </HorizontalScrollView>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="📹 Cámara USB"
+                            android:textColor="#ffffff"
+                            android:textSize="14sp"
+                            android:paddingBottom="2dp"
+                            android:paddingStart="4dp" />
 
-</LinearLayout>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="🌀 Ventilador USB"
+                            android:textColor="#ffffff"
+                            android:textSize="14sp"
+                            android:paddingStart="4dp" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+        </HorizontalScrollView>
+    </LinearLayout>
 
     <!-- Navigation Drawer -->
-<com.google.android.material.navigation.NavigationView
-android:id="@+id/nav_view"
-android:layout_width="280dp"
-android:layout_height="match_parent"
-android:layout_gravity="start"
-android:background="#121212"
-app:headerLayout="@layout/nav_header"
-app:menu="@menu/drawer_menu" />
-
-    </androidx.drawerlayout.widget.DrawerLayout>
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="280dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="#121212"
+        app:headerLayout="@layout/nav_header"
+        app:menu="@menu/drawer_menu" />
+</androidx.drawerlayout.widget.DrawerLayout>
