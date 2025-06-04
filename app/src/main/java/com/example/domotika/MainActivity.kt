@@ -74,12 +74,15 @@ class MainActivity : AppCompatActivity() {
         val cardView2 = findViewById<MaterialCardView>(R.id.cardView2)
         val cardView3 = findViewById<MaterialCardView>(R.id.cardView3)
         val cardView4 = findViewById<MaterialCardView>(R.id.cardView4)
+        val cardView5 = findViewById<MaterialCardView>(R.id.cardView5)
+
 
 
         setLiftEffect(cardView1)
         setLiftEffect(cardView2)
         setLiftEffect(cardView3)
         setLiftEffect(cardView4)
+        setLiftEffect(cardView5)
 
         // Abrir nueva Activity al hacer clic
         cardView1.setOnClickListener {
@@ -96,6 +99,9 @@ class MainActivity : AppCompatActivity() {
 
         cardView4.setOnClickListener {
             startActivity(Intent(this, UsbActivity::class.java))
+        }
+        cardView5.setOnClickListener {
+            startActivity(Intent(this, WifiActivity::class.java))
         }
 
 

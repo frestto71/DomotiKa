@@ -1,0 +1,82 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/wifiContainer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#f0f4f8"
+    android:padding="20dp">
+
+    <!-- Card Encabezado -->
+<androidx.cardview.widget.CardView
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:layout_marginBottom="24dp"
+android:layout_marginTop="40dp"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="8dp"
+    app:cardBackgroundColor="#1e1e1e">
+
+<LinearLayout
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:orientation="vertical"
+android:padding="24dp"
+android:gravity="center_horizontal">
+
+<TextView
+    android:id="@+id/title"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="📶 Productos WiFi"
+    android:textColor="#ffffff"
+    android:textSize="26sp"
+    android:textStyle="bold"
+    android:layout_marginBottom="12dp" />
+
+<com.google.android.material.button.MaterialButton
+    android:id="@+id/btn_add_wifi"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="+ Agregar producto WiFi"
+    android:textColor="#ffffff"
+    android:textStyle="bold"
+    android:paddingStart="32dp"
+    android:paddingEnd="32dp"
+    android:paddingTop="12dp"
+    android:paddingBottom="12dp"
+    android:layout_marginTop="4dp"
+    android:elevation="6dp"
+    app:backgroundTint="#09a685"
+    app:rippleColor="#2f2e2e" />
+
+</LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1"
+    android:fillViewport="true">
+
+<LinearLayout
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:orientation="vertical"
+android:gravity="center"
+android:paddingTop="24dp"
+    android:paddingBottom="24dp">
+
+<TextView
+android:id="@+id/empty_message"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:text="Aún no hay productos agregados."
+android:textSize="16sp"
+android:textColor="#999999"
+    android:gravity="center"
+    android:alpha="0.7" />
+
+    </LinearLayout>
+    </ScrollView>
+    </LinearLayout>

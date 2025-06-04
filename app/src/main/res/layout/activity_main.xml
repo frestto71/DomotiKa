@@ -105,6 +105,62 @@
             android:dividerPadding="6dp">
 
             <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardView5"
+                android:layout_width="160dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:clickable="true"
+                android:elevation="4dp"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                app:cardBackgroundColor="#064739"
+                app:cardCornerRadius="8dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="12dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="6dp"
+                        android:text="WIFI"
+                        android:textColor="#09a685"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="📷 Camaras"
+                        android:textColor="#ffffff"
+                        android:textSize="14sp"
+                        android:paddingBottom="2dp"
+                        android:paddingStart="4dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="🔒 Cerraduras"
+                        android:textColor="#ffffff"
+                        android:textSize="14sp"
+                        android:paddingBottom="2dp"
+                        android:paddingStart="4dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="💡 Focos"
+                        android:textColor="#ffffff"
+                        android:textSize="14sp"
+                        android:paddingStart="4dp" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardView1"
                 android:layout_width="160dp"
                 android:layout_height="wrap_content"

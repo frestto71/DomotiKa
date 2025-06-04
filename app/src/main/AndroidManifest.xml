@@ -47,6 +47,8 @@
         <activity android:name=".BluetoothActivity" />
         <activity android:name=".InfraredActivity" />
         <activity android:name=".NfcActivity" />
+        <activity android:name=".WifiActivity" />
+
 
         <!-- BroadcastReceiver para notificaciones -->
         <receiver
