@@ -1,32 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- 🔐 PERMISOS PARA USB -->
-    <uses-feature android:name="android.hardware.usb.host" />
+    <!-- 🔐 PERMISOS VARIOS -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-
-    <!-- 🔐 PERMISOS PARA BLUETOOTH -->
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
     <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
-
-    <!-- PERMISOS PARA WIFI Y RED -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <!-- Para Android 13+, acceso a dispositivos wifi cercanos -->
     <uses-permission android:name="android.permission.NEARBY_WIFI_DEVICES" tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.NFC" />
-    <uses-feature android:name="android.hardware.nfc" android:required="true" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
-
-    <!-- INTERNET -->
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <!-- Features -->
+    <uses-feature android:name="android.hardware.usb.host" />
     <uses-feature android:name="android.hardware.bluetooth" android:required="true" />
+    <uses-feature android:name="android.hardware.nfc" android:required="true" />
 
     <application
         android:requestLegacyExternalStorage="true"
@@ -39,26 +34,32 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Domotika">
 
-        <!-- ACTIVIDADES -->
+        <!-- Otras actividades de tu app -->
         <activity android:name=".UsbActivity" android:exported="true" />
         <activity android:name=".CameraPlayerActivity" />
         <activity android:name=".InfraredControlActivity" />
         <activity android:name=".BluetoothActivity" />
         <activity android:name=".InfraredActivity" />
-        <activity android:name=".NfcActivity" />
         <activity android:name=".WifiActivity" />
 
-        <!-- BroadcastReceiver para notificaciones -->
-        <receiver
-            android:name=".UsbActivity$mediaControlReceiver"
+        <!-- NFC Activity -->
+        <activity
+            android:name=".NfcActivity"
             android:exported="true">
+            <!-- Recibir tags NDEF con MIME text/plain -->
             <intent-filter>
-                <action android:name="com.example.domotika.ACTION_PAUSE" />
-                <action android:name="com.example.domotika.ACTION_PLAY" />
+                <action android:name="android.nfc.action.NDEF_DISCOVERED"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="text/plain"/>
             </intent-filter>
-        </receiver>
+            <!-- Recibir cualquier tag NFC si no hay otro filtro -->
+            <intent-filter>
+                <action android:name="android.nfc.action.TAG_DISCOVERED"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
 
-        <!-- ACTIVIDAD PRINCIPAL -->
+        <!-- Actividad principal -->
         <activity android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
@@ -67,7 +68,7 @@
             </intent-filter>
         </activity>
 
-        <!-- Servicio de emulación de tarjeta con comandos APDU -->
+        <!-- Servicio HCE para emulación APDU -->
         <service
             android:name=".hce.CardEmulationService"
             android:exported="true"
@@ -77,9 +78,8 @@
             </intent-filter>
             <meta-data
                 android:name="android.nfc.cardemulation.host_apdu_service"
-                android:resource="@xml/hce_service" /> <!-- Usamos solo uno de los recursos -->
+                android:resource="@xml/hce_service" />
         </service>
 
     </application>
-
 </manifest>

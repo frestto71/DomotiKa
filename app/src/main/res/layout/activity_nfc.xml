@@ -9,7 +9,7 @@
     android:background="#f0f4f8"
     android:padding="20dp">
 
-    <!-- Card Encabezado (igual que antes) -->
+    <!-- Encabezado -->
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -48,13 +48,12 @@
                 android:paddingTop="12dp"
                 android:paddingBottom="12dp"
                 android:layout_marginTop="4dp"
-                android:elevation="6dp"
                 app:backgroundTint="#09a685"
                 app:rippleColor="#2f2e2e" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
-    <!-- Contenedor para el ID y el botón de emular -->
+    <!-- Contenedor detección/escritura -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -81,24 +80,31 @@
             android:layout_marginTop="4dp"
             android:visibility="gone" />
 
+        <!-- Campo de texto para ingresar contenido -->
+        <EditText
+            android:id="@+id/edit_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Escribe texto aquí"
+            android:textColor="#000000"
+            android:padding="12dp"
+            android:background="@android:drawable/edit_text"/>
+
+        <!-- Botón para iniciar escritura -->
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_emulate"
+            android:id="@+id/btn_write"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Emular"
-            android:textColor="#ffffff"
-            android:textStyle="bold"
-            android:paddingStart="32dp"
-            android:paddingEnd="32dp"
-            android:paddingTop="12dp"
-            android:paddingBottom="12dp"
             android:layout_marginTop="12dp"
             android:elevation="6dp"
-            android:visibility="gone"
-            app:backgroundTint="#FF5722"
+            android:paddingStart="32dp"
+            android:paddingTop="12dp"
+            android:paddingEnd="32dp"
+            android:paddingBottom="12dp"
+            android:text="Escribir"
+            android:textColor="#ffffff"
+            android:textStyle="bold"
+            app:backgroundTint="#3F51B5"
             app:rippleColor="#2f2e2e" />
     </LinearLayout>
-
-    <!-- (Puedes quitar el RecyclerView ya que no lo usaremos) -->
-
 </LinearLayout>
