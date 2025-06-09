@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f0f4f8"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:spacing="16dp">
+
+        <!-- Card: ID de la tarjeta -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp"
+            app:strokeColor="#DDDDDD"
+            app:strokeWidth="1dp"
+            android:layout_marginBottom="12dp">
+
+            <TextView
+                android:id="@+id/text_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:text="ID: "
+                android:textColor="#333333"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:visibility="gone"/>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Card: Contenido NDEF -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp"
+            app:strokeColor="#DDDDDD"
+            app:strokeWidth="1dp"
+            android:layout_marginBottom="12dp">
+
+            <TextView
+                android:id="@+id/text_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:text="Contenido NDEF:"
+                android:textColor="#333333"
+                android:textSize="14sp"
+                android:visibility="gone"/>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Card: Entrada de texto -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="2dp"
+            app:strokeColor="#DDDDDD"
+            app:strokeWidth="1dp"
+            android:layout_marginBottom="12dp">
+
+            <EditText
+                android:id="@+id/edit_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Escribe texto a grabar"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#BBBBBB"
+                android:backgroundTint="#333333"
+                android:padding="16dp"/>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Botón -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_write"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:text="Escribir NFC"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF"
+            app:backgroundTint="#3F51B5"
+            android:icon="@android:drawable/ic_menu_send"
+            android:iconTint="#FFFFFF"
+            app:iconPadding="8dp"/>
+
+    </LinearLayout>
+</ScrollView>

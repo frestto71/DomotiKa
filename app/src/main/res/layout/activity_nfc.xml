@@ -13,8 +13,8 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
         android:layout_marginTop="40dp"
+        android:layout_marginBottom="24dp"
         app:cardCornerRadius="20dp"
         app:cardElevation="8dp"
         app:cardBackgroundColor="#1e1e1e">
@@ -37,74 +37,34 @@
                 android:layout_marginBottom="12dp" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_clear_tags"
+                android:id="@+id/btn_tools"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="🧹 Limpiar"
+                android:layout_marginTop="4dp"
+                android:text="🛠️  Herramientas"
+                android:textAllCaps="false"
                 android:textColor="#ffffff"
                 android:textStyle="bold"
                 android:paddingStart="32dp"
                 android:paddingEnd="32dp"
                 android:paddingTop="12dp"
                 android:paddingBottom="12dp"
-                android:layout_marginTop="4dp"
+                android:elevation="6dp"
                 app:backgroundTint="#09a685"
-                app:rippleColor="#2f2e2e" />
+                app:rippleColor="#2f2e2e"
+                android:onClick="openTools" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
-    <!-- Contenedor detección/escritura -->
-    <LinearLayout
+    <!-- Lista de datos con padding y selector táctil -->
+    <ListView
+        android:id="@+id/list_data"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp"
-        android:layout_margin="8dp"
-        android:background="@drawable/rounded_backgroundnfc">
-
-        <TextView
-            android:id="@+id/text_id"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#ffffff"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/text_content"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#ffffff"
-            android:textSize="14sp"
-            android:layout_marginTop="4dp"
-            android:visibility="gone" />
-
-        <!-- Campo de texto para ingresar contenido -->
-        <EditText
-            android:id="@+id/edit_input"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Escribe texto aquí"
-            android:textColor="#000000"
-            android:padding="12dp"
-            android:background="@android:drawable/edit_text"/>
-
-        <!-- Botón para iniciar escritura -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_write"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:elevation="6dp"
-            android:paddingStart="32dp"
-            android:paddingTop="12dp"
-            android:paddingEnd="32dp"
-            android:paddingBottom="12dp"
-            android:text="Escribir"
-            android:textColor="#ffffff"
-            android:textStyle="bold"
-            app:backgroundTint="#3F51B5"
-            app:rippleColor="#2f2e2e" />
-    </LinearLayout>
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:divider="#CCCCCC"
+        android:dividerHeight="1dp"
+        android:padding="8dp"
+        android:clipToPadding="false"
+        android:listSelector="?android:attr/selectableItemBackground"/>
 </LinearLayout>

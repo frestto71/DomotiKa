@@ -59,12 +59,17 @@
             </intent-filter>
         </activity>
 
+        <!-- ToolsActivity que gestiona lectura/escritura NFC -->
+        <activity
+            android:name=".ToolsActivity"
+            android:exported="true" />
+
         <!-- Actividad principal -->
         <activity android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
 
@@ -74,12 +79,13 @@
             android:exported="true"
             android:permission="android.permission.BIND_HOST_APDU_SERVICE">
             <intent-filter>
-                <action android:name="android.nfc.cardemulation.action.HOST_APDU_SERVICE" />
+                <action android:name="android.nfc.cardemulation.action.HOST_APDU_SERVICE"/>
             </intent-filter>
             <meta-data
                 android:name="android.nfc.cardemulation.host_apdu_service"
-                android:resource="@xml/hce_service" />
+                android:resource="@xml/hce_service"/>
         </service>
+
 
     </application>
 </manifest>
