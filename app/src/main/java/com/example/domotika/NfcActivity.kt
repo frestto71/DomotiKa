@@ -27,6 +27,9 @@ class NfcActivity : AppCompatActivity() {
     private lateinit var btnEmulate: MaterialButton
     private lateinit var btnClear: MaterialButton
 
+    // Define un AID único que será emulado (puedes personalizarlo)
+    private val AID = "F1234567890ABCDE" // Asegúrate de que sea único
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_nfc)
@@ -36,20 +39,18 @@ class NfcActivity : AppCompatActivity() {
         btnEmulate = findViewById(R.id.btn_emulate)
         btnClear = findViewById(R.id.btn_clear_tags)
 
+        // Limpia la detección
         btnClear.setOnClickListener {
-            // Reiniciar detección
             tagDetected = false
             detectedTagId = null
             detectedTagTech = null
-
             textId.visibility = TextView.GONE
             textContent.visibility = TextView.GONE
             btnEmulate.visibility = MaterialButton.GONE
-
             showToast("Se reinició la detección")
         }
 
-        // Inicializar NFC
+        // Inicializa NFC
         nfcAdapter = NfcAdapter.getDefaultAdapter(this) ?: run {
             showToast("NFC no disponible en este dispositivo")
             finish()
@@ -60,30 +61,23 @@ class NfcActivity : AppCompatActivity() {
             startActivity(Intent(Settings.ACTION_NFC_SETTINGS))
         }
 
-        // Click de Emular
+        // Emula el ID de la tarjeta
         btnEmulate.setOnClickListener {
-            detectedTagId?.let { id ->  // Emula solo el ID de la tarjeta detectada
+            detectedTagId?.let { id ->
                 detectedTagTech?.let { tech ->
-                    // 1) Emulación con el ID y la tecnología de la tarjeta detectada
-                    val record = buildTextNdef("$id | Tecnología: $tech", "es")  // Emula el ID y la tecnología de la tarjeta
+                    // En lugar de setNdefPayload, procesamos el comando APDU y emulamos la tarjeta
+                    val record = buildTextNdef("$id | Tecnología: $tech", "es")
 
-                    // 2) Asegúrate de que el servicio HCE esté levantado para responder al SELECT del lector
+                    // Activa el servicio HCE para emular la tarjeta
                     val svc = Intent(this, CardEmulationService::class.java)
-                    startService(svc)  // Esto activa el servicio HCE
+                    startService(svc)  // Inicia el servicio HCE
 
-                    // 3) Le pasa el NDEF al servicio HCE para que el teléfono lo emule
-                    val cardEmulationService = CardEmulationService()
-                    cardEmulationService.setNdefPayload(record)
-
-                    // 4) Mostrar en la pantalla que estamos emulando la tarjeta
+                    // Muestra la emulación en pantalla
                     textContent.text = "Emulando tarjeta con ID: $id\nTecnología: $tech"
                     textContent.visibility = TextView.VISIBLE
 
-                    // 5) Mostrar un Toast que le indique al usuario que se está emulando
+                    // Muestra un toast de la emulación
                     showToast("Emulación en proceso... ID: $id, Tecnología: $tech")
-
-                    // 6) Opcional: Agregar alerta adicional
-                    showAlert("Emulación iniciada", "Tu teléfono ahora está emulando la tarjeta con ID: $id y Tecnología: $tech")
                 }
             }
         }

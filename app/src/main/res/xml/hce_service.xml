@@ -1,0 +1,4 @@
+<host-apdu-service xmlns:android="http://schemas.android.com/apk/res/android"
+    android:name="com.example.domotika.hce.CardEmulationService"
+    android:category="android.intent.category.DEFAULT"
+    android:icon="@mipmap/ic_launcher"/>
