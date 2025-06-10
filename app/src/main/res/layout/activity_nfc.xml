@@ -42,6 +42,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:text="🛠️  Herramientas"
+                android:textSize="17sp"
                 android:textAllCaps="false"
                 android:textColor="#ffffff"
                 android:textStyle="bold"

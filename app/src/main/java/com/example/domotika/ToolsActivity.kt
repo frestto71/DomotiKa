@@ -16,28 +16,38 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.card.MaterialCardView
+import com.google.android.material.textfield.TextInputLayout
+
 import java.util.*
 
 class ToolsActivity : AppCompatActivity() {
 
     private lateinit var nfcAdapter: NfcAdapter
     private var writingMode = false
+    private var deletingMode = false
     private var writeDialog: AlertDialog? = null
 
     private lateinit var textId: TextView
     private lateinit var textContent: TextView
     private lateinit var editInput: EditText
     private lateinit var btnWrite: MaterialButton
+    private lateinit var btnDelete: MaterialButton
+    private lateinit var inputLayout: TextInputLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tools)
 
+        // Vinculación de las vistas con findViewById
         textId = findViewById(R.id.text_id)
         textContent = findViewById(R.id.text_content)
+        inputLayout = findViewById(R.id.input_layout)
         editInput = findViewById(R.id.edit_input)
         btnWrite = findViewById(R.id.btn_write)
+        btnDelete = findViewById(R.id.btn_delete)  // Asegúrate de que este ID exista en el XML
 
+        // Verifica si NFC está disponible
         nfcAdapter = NfcAdapter.getDefaultAdapter(this) ?: run {
             Toast.makeText(this, "NFC no disponible", Toast.LENGTH_SHORT).show()
             finish()
@@ -48,6 +58,7 @@ class ToolsActivity : AppCompatActivity() {
             startActivity(Intent(Settings.ACTION_NFC_SETTINGS))
         }
 
+        // Configuración del botón Escribir
         btnWrite.setOnClickListener {
             val text = editInput.text.toString().trim()
             if (text.isEmpty()) {
@@ -57,6 +68,13 @@ class ToolsActivity : AppCompatActivity() {
                 editInput.isEnabled = false
                 showWritePrompt()
             }
+        }
+
+        // Configuración del botón Borrar
+        btnDelete.setOnClickListener {
+            deletingMode = true
+            editInput.isEnabled = false
+            showDeletePrompt()
         }
     }
 
@@ -82,25 +100,53 @@ class ToolsActivity : AppCompatActivity() {
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-        if (!writingMode) return
         val tag = intent.getParcelableExtra<Tag>(NfcAdapter.EXTRA_TAG) ?: return
-        val success = writeTextToTag(tag, editInput.text.toString(), Locale.getDefault())
-        if (success) {
-            writingMode = false
-            writeDialog?.dismiss()
-            Toast.makeText(this, "Escritura completada", Toast.LENGTH_SHORT).show()
-            editInput.isEnabled = true
+
+        if (writingMode) {
+            val success = writeTextToTag(tag, editInput.text.toString(), Locale.getDefault())
+            if (success) {
+                writingMode = false
+                writeDialog?.dismiss()
+                Toast.makeText(this, "Escritura completada", Toast.LENGTH_SHORT).show()
+                editInput.isEnabled = true
+            }
+        } else if (deletingMode) {
+            val success = deleteTag(tag)
+            if (success) {
+                deletingMode = false
+                Toast.makeText(this, "Etiqueta borrada", Toast.LENGTH_SHORT).show()
+                editInput.isEnabled = true
+            }
         }
     }
 
+    // Muestra el mensaje cuando se activa el modo de escritura
     private fun showWritePrompt() {
         writeDialog = AlertDialog.Builder(this)
             .setTitle("Listo para escribir")
             .setMessage("Acerca la tarjeta NFC...")
             .setCancelable(false)
+            .setIcon(android.R.drawable.ic_dialog_info)
+            .setPositiveButton("¡Escribir!") { dialog, _ ->
+                dialog.dismiss()
+            }
             .create().also { it.show() }
     }
 
+    // Muestra el mensaje cuando se activa el modo de borrado
+    private fun showDeletePrompt() {
+        writeDialog = AlertDialog.Builder(this)
+            .setTitle("Listo para borrar")
+            .setMessage("Acerca la tarjeta NFC para borrar el contenido...")
+            .setCancelable(false)
+            .setIcon(android.R.drawable.ic_dialog_info)
+            .setPositiveButton("Borrar") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .create().also { it.show() }
+    }
+
+    // Función para escribir texto en la etiqueta NFC
     private fun writeTextToTag(tag: Tag, text: String, locale: Locale): Boolean {
         return try {
             val record = NdefRecord.createTextRecord(locale.language, text)
@@ -118,4 +164,29 @@ class ToolsActivity : AppCompatActivity() {
             false
         }
     }
+
+    // Función para borrar el contenido de la etiqueta NFC
+    private fun deleteTag(tag: Tag): Boolean {
+        return try {
+            val ndef = Ndef.get(tag) ?: throw Exception("Tag no NDEF")
+            ndef.connect()
+            if (!ndef.isWritable) throw Exception("Tag protegido")
+
+            // Crear un registro vacío para "borrar" el contenido
+            val emptyRecord = NdefRecord.createTextRecord("en", "")  // Un texto vacío como registro
+            val message = NdefMessage(arrayOf(emptyRecord))  // Un mensaje con un registro vacío
+
+            ndef.writeNdefMessage(message)  // Borra el contenido
+            ndef.close()
+
+            // Cerrar el diálogo de "Listo para borrar"
+            writeDialog?.dismiss()
+
+            true
+        } catch (e: Exception) {
+            Toast.makeText(this, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+            false
+        }
+    }
+
 }

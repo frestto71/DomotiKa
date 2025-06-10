@@ -13,6 +13,58 @@
         android:orientation="vertical"
         android:spacing="16dp">
 
+        <!-- Encabezado -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="24dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="8dp"
+            app:cardBackgroundColor="#1e1e1e">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="24dp"
+                android:gravity="center_horizontal">
+
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Herramientas NFC"
+                    android:textColor="#ffffff"
+                    android:textSize="26sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="12dp" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Card: Borrar etiqueta -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp"
+            app:strokeColor="#DDDDDD"
+            app:strokeWidth="1dp"
+            android:layout_marginBottom="16dp">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_delete"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Borrar etiqueta"
+                android:textColor="#FFFFFF"
+                app:backgroundTint="#09a685"
+                android:icon="@android:drawable/ic_menu_delete"
+                android:iconTint="#FFFFFF"
+                app:iconPadding="8dp"
+                android:layout_margin="16dp"/>
+        </com.google.android.material.card.MaterialCardView>
+
         <!-- Card: ID de la tarjeta -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
@@ -56,40 +108,71 @@
                 android:visibility="gone"/>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Card: Entrada de texto -->
+        <!-- Título independiente antes del Input -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Escribir Etiqueta"
+            android:textColor="#333333"
+            android:textSize="20sp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="16dp"/>
+
+        <!-- Card: Entrada de texto con el botón dentro -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:cardCornerRadius="12dp"
-            app:cardElevation="2dp"
+            app:cardElevation="24dp"
             app:strokeColor="#DDDDDD"
             app:strokeWidth="1dp"
-            android:layout_marginBottom="12dp">
+            android:layout_marginBottom="1dp">
 
-            <EditText
-                android:id="@+id/edit_input"
+            <!-- Contenedor para Input y Botón -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Escribe texto a grabar"
-                android:textColor="#FFFFFF"
-                android:textColorHint="#BBBBBB"
-                android:backgroundTint="#333333"
-                android:padding="16dp"/>
-        </com.google.android.material.card.MaterialCardView>
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
 
-        <!-- Botón -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_write"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:text="Escribir NFC"
-            android:textAllCaps="false"
-            android:textColor="#FFFFFF"
-            app:backgroundTint="#3F51B5"
-            android:icon="@android:drawable/ic_menu_send"
-            android:iconTint="#FFFFFF"
-            app:iconPadding="8dp"/>
+                <!-- TextInputLayout para mejorar el estilo del EditText -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/input_layout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Agrega un texto a la etiqueta"
+                    android:layout_marginBottom="2dp"
+                    app:boxBackgroundColor="#333333"
+                    app:boxStrokeColor="#333333">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edit_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="80dp"
+                        android:textColor="#FFFFFF"
+                        android:textColorHint="#BBBBBB"
+                        android:backgroundTint="#333333"
+                        android:padding="16dp"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Botón dentro del Input con margen a la derecha -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_write"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Escribir NFC"
+                    android:textAllCaps="false"
+                    android:textColor="#FFFFFF"
+                    app:backgroundTint="#09a685"
+                    android:icon="@android:drawable/ic_menu_send"
+                    android:iconTint="#FFFFFF"
+                    app:iconPadding="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_gravity="center_vertical"/>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
     </LinearLayout>
 </ScrollView>
