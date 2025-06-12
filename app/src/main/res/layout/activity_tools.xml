@@ -108,7 +108,7 @@
                 android:visibility="gone"/>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Título independiente antes del Input -->
+        <!-- Título para escribir etiqueta -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -171,6 +171,95 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="16dp"
                     android:layout_gravity="center_vertical"/>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Título para configuración Wi-Fi -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Configurar Wi-Fi"
+            android:textColor="#333333"
+            android:textSize="20sp"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="16dp"/>
+
+        <!-- Card: Entrada para Wi-Fi -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="24dp"
+            app:strokeColor="#DDDDDD"
+            app:strokeWidth="1dp"
+            android:layout_marginBottom="16dp">
+
+            <!-- Contenedor para la entrada de Wi-Fi -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <!-- Campo para el SSID (Nombre de la red Wi-Fi) -->
+                <!-- SSID -->
+                <EditText
+                    android:id="@+id/auto_security_type"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Nombre de la red"
+                    android:inputType="text"
+                    android:textColor="#FFFFFF"
+                    android:textColorHint="#BBBBBB"
+                    android:backgroundTint="#333333"
+                    android:padding="12dp"
+                    android:layout_marginBottom="16dp"/>
+                <EditText
+                    android:id="@+id/edit_ssid"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Tipo de seguridad (WAP/WPA2)"
+                    android:inputType="text"
+                    android:textColor="#FFFFFF"
+                    android:textColorHint="#BBBBBB"
+                    android:backgroundTint="#333333"
+                    android:padding="12dp"
+                    android:layout_marginBottom="16dp"/>
+                <EditText
+                    android:id="@+id/edit_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Contraseña"
+                    android:inputType="textPassword"
+                    android:textColor="#FFFFFF"
+                    android:textColorHint="#BBBBBB"
+                    android:backgroundTint="#333333"
+                    android:padding="12dp"
+                    android:layout_marginBottom="16dp"/>
+
+
+                <!-- Red oculta -->
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/switch_hidden_ssid"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Red oculta"
+                    android:layout_marginBottom="16dp"/>
+
+                <!-- Botón dentro de la tarjeta, alineado a la derecha -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_configure_wifi"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Configurar Red Wi-Fi"
+                    android:textColor="#FFFFFF"
+                    app:backgroundTint="#09a685"
+                    android:iconTint="#FFFFFF"
+                    app:iconPadding="8dp"
+                    android:layout_gravity="end"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"/>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
