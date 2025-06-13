@@ -202,10 +202,9 @@
                 android:orientation="vertical"
                 android:padding="16dp">
 
-                <!-- Campo para el SSID (Nombre de la red Wi-Fi) -->
-                <!-- SSID -->
+                <!-- Nombre de la red -->
                 <EditText
-                    android:id="@+id/auto_security_type"
+                    android:id="@+id/edit_ssid"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Nombre de la red"
@@ -215,17 +214,18 @@
                     android:backgroundTint="#333333"
                     android:padding="12dp"
                     android:layout_marginBottom="16dp"/>
-                <EditText
-                    android:id="@+id/edit_ssid"
+
+                <!-- Tipo de seguridad como Spinner normal -->
+                <Spinner
+                    android:id="@+id/auto_security_type"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Tipo de seguridad (WAP/WPA2)"
-                    android:inputType="text"
-                    android:textColor="#FFFFFF"
-                    android:textColorHint="#BBBBBB"
+                    android:layout_marginBottom="16dp"
                     android:backgroundTint="#333333"
-                    android:padding="12dp"
-                    android:layout_marginBottom="16dp"/>
+                    android:popupBackground="#333333"
+                    android:padding="12dp"/>
+
+                <!-- Contraseña -->
                 <EditText
                     android:id="@+id/edit_password"
                     android:layout_width="match_parent"
@@ -238,16 +238,16 @@
                     android:padding="12dp"
                     android:layout_marginBottom="16dp"/>
 
-
                 <!-- Red oculta -->
                 <com.google.android.material.switchmaterial.SwitchMaterial
                     android:id="@+id/switch_hidden_ssid"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Red oculta"
+                    android:textColor="#FFFFFF"
                     android:layout_marginBottom="16dp"/>
 
-                <!-- Botón dentro de la tarjeta, alineado a la derecha -->
+                <!-- Botón configurar WiFi -->
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_configure_wifi"
                     android:layout_width="wrap_content"
