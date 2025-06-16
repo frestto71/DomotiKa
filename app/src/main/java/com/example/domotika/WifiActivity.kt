@@ -68,10 +68,11 @@ class WifiActivity : AppCompatActivity(), SurfaceHolder.Callback {
     private var isSurfaceReady = false
     private val streamUrl = "https://domotica.bsite.net/api/stream"
 
-    // Timer
+    // Timer y control de memoria
     private val handler = Handler()
     private var streamStartTime = 0L
     private var timeUpdateRunnable: Runnable? = null
+    private var streamingRunnable: Runnable? = null // 🔧 NUEVO: Control manual de frames
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -129,16 +130,16 @@ class WifiActivity : AppCompatActivity(), SurfaceHolder.Callback {
         )
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinnerQuality.adapter = adapter
-        spinnerQuality.setSelection(1) // Media por defecto
+        spinnerQuality.setSelection(2) // 🔧 CAMBIO: Baja calidad por defecto
     }
 
     private fun setupSeekBar() {
-        seekBarFPS.max = 30 // Máximo 30 FPS
-        seekBarFPS.progress = 15 // 15 FPS por defecto
+        seekBarFPS.max = 10 // 🔧 CAMBIO: Máximo 10 FPS para ahorrar memoria
+        seekBarFPS.progress = 2 // 🔧 CAMBIO: 2 FPS por defecto
 
         seekBarFPS.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                val fps = if (progress < 5) 5 else progress // Mínimo 5 FPS
+                val fps = if (progress < 1) 1 else progress // Mínimo 1 FPS
                 tvFPSValue.text = "$fps FPS"
             }
 
@@ -147,7 +148,7 @@ class WifiActivity : AppCompatActivity(), SurfaceHolder.Callback {
         })
 
         // Inicializar valor de FPS
-        tvFPSValue.text = "15 FPS"
+        tvFPSValue.text = "2 FPS"
     }
 
     private fun setupClickListeners() {
@@ -260,17 +261,11 @@ class WifiActivity : AppCompatActivity(), SurfaceHolder.Callback {
                 cam.setDisplayOrientation(result)
                 Log.d("CAMERA", "Rotación configurada: $result grados")
 
-                // Configurar resolución según calidad seleccionada
+                // 🔧 CAMBIO: Usar siempre la resolución MÁS PEQUEÑA para ahorrar memoria
                 val supportedSizes = parameters.supportedPreviewSizes
-                val quality = spinnerQuality.selectedItem.toString()
+                val minSize = supportedSizes.minByOrNull { it.width * it.height } ?: supportedSizes[0]
 
-                val targetSize = when {
-                    quality.contains("720p") -> findBestSize(supportedSizes, 1280, 720)
-                    quality.contains("480p") -> findBestSize(supportedSizes, 640, 480)
-                    else -> findBestSize(supportedSizes, 320, 240)
-                }
-
-                parameters.setPreviewSize(targetSize.width, targetSize.height)
+                parameters.setPreviewSize(minSize.width, minSize.height)
                 parameters.previewFormat = ImageFormat.NV21
 
                 // Configurar enfoque automático si está disponible
@@ -282,7 +277,7 @@ class WifiActivity : AppCompatActivity(), SurfaceHolder.Callback {
                 }
 
                 cam.parameters = parameters
-                Log.d("CAMERA", "Parámetros configurados: ${targetSize.width}x${targetSize.height}")
+                Log.d("CAMERA", "Resolución mínima configurada: ${minSize.width}x${minSize.height}")
 
             } catch (e: Exception) {
                 Log.e("CAMERA", "Error configurando parámetros: ${e.message}")
@@ -331,6 +326,7 @@ class WifiActivity : AppCompatActivity(), SurfaceHolder.Callback {
         camera = null
     }
 
+    // 🔧 NUEVO MÉTODO: Streaming optimizado sin memory leak
     private fun startStreaming() {
         if (camera != null && !isStreaming) {
             isStreaming = true
@@ -344,23 +340,102 @@ class WifiActivity : AppCompatActivity(), SurfaceHolder.Callback {
 
             updateStatus("🔴 Transmitiendo en vivo", true)
 
-            // Configurar callback para capturar frames
-            val fps = seekBarFPS.progress.let { if (it < 5) 5 else it }
+            // 🔧 CAMBIO PRINCIPAL: Control manual de frames sin setPreviewCallback
+            val fps = seekBarFPS.progress.let { if (it < 1) 1 else it }
+            val frameInterval = 1000L / fps // Intervalo entre frames en ms
 
-            camera?.setPreviewCallback { data, _ ->
-                if (isStreaming) {
-                    // Usar un handler para controlar la velocidad de frames
-                    handler.post {
-                        SendFrameTask().execute(data)
+            streamingRunnable = object : Runnable {
+                override fun run() {
+                    if (isStreaming) {
+                        // 🎯 Capturar UN SOLO frame bajo demanda
+                        camera?.setOneShotPreviewCallback { data, _ ->
+                            if (isStreaming && data != null) {
+                                // 🚀 Enviar en hilo separado
+                                Thread {
+                                    sendFrameOptimized(data)
+                                }.start()
+                            }
+                        }
+
+                        // ⏰ Programar el siguiente frame
+                        handler.postDelayed(this, frameInterval)
                     }
                 }
             }
 
+            // Iniciar el primer frame
+            handler.post(streamingRunnable!!)
+
             startTimeUpdater()
-            Toast.makeText(this, "🔴 Streaming iniciado", Toast.LENGTH_SHORT).show()
-            Log.d("STREAM", "Streaming iniciado con $fps FPS")
+            Toast.makeText(this, "🔴 Streaming iniciado (Modo Económico)", Toast.LENGTH_SHORT).show()
+            Log.d("STREAM", "Streaming iniciado: $fps FPS (${frameInterval}ms por frame)")
         } else {
             Toast.makeText(this, "Cámara no disponible", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    // 🔧 NUEVO MÉTODO: Envío optimizado de frames
+    private fun sendFrameOptimized(frameData: ByteArray) {
+        try {
+            // 🧠 Verificar memoria antes de procesar
+            checkMemoryUsage()
+
+            val parameters = camera?.parameters
+            val width = parameters?.previewSize?.width ?: 320
+            val height = parameters?.previewSize?.height ?: 240
+
+            val yuvImage = YuvImage(frameData, ImageFormat.NV21, width, height, null)
+            val out = ByteArrayOutputStream()
+
+            // 🗜️ CALIDAD MUY BAJA para ahorrar memoria
+            val quality = 15 // Muy bajo para evitar crashes
+
+            yuvImage.compressToJpeg(Rect(0, 0, width, height), quality, out)
+
+            val jpegData = out.toByteArray()
+
+            // 🧹 Cerrar stream inmediatamente
+            out.close()
+
+            // ✅ BASE64 SIN SALTOS DE LÍNEA
+            val base64Image = Base64.encodeToString(jpegData, Base64.NO_WRAP)
+
+            // 🌐 Enviar al servidor
+            sendFrameToServer(base64Image)
+
+            Log.d("STREAM", "Frame enviado - Tamaño: ${jpegData.size} bytes")
+
+        } catch (e: OutOfMemoryError) {
+            Log.e("STREAM", "OutOfMemoryError: ${e.message}")
+            runOnUiThread {
+                stopStreaming()
+                Toast.makeText(this, "⚠️ Memoria insuficiente - Stream detenido", Toast.LENGTH_LONG).show()
+            }
+        } catch (e: Exception) {
+            Log.e("STREAM", "Error enviando frame: ${e.message}")
+        } finally {
+            // 🗑️ Forzar limpieza
+            System.gc()
+        }
+    }
+
+    // 🔧 NUEVO MÉTODO: Monitor de memoria
+    private fun checkMemoryUsage() {
+        val runtime = Runtime.getRuntime()
+        val usedMemory = runtime.totalMemory() - runtime.freeMemory()
+        val maxMemory = runtime.maxMemory()
+        val percentUsed = (usedMemory * 100) / maxMemory
+
+        if (percentUsed > 75) {
+            Log.w("MEMORY", "Memoria crítica: ${percentUsed}% - Limpiando...")
+            System.gc()
+
+            if (percentUsed > 85) {
+                runOnUiThread {
+                    stopStreaming()
+                    Toast.makeText(this, "⚠️ Memoria crítica - Stream pausado", Toast.LENGTH_LONG).show()
+                }
+            }
         }
     }
 
@@ -373,12 +448,20 @@ class WifiActivity : AppCompatActivity(), SurfaceHolder.Callback {
         statusIndicator.isSelected = false
         liveOverlay.visibility = View.GONE
 
+        // 🔧 CAMBIO: Limpiar runnable de streaming
+        streamingRunnable?.let { handler.removeCallbacks(it) }
+        streamingRunnable = null
+
+        // Limpiar callback de cámara
         camera?.setPreviewCallback(null)
 
         stopTimeUpdater()
         updateStatus("Transmisión detenida", false)
         Toast.makeText(this, "⏹ Streaming detenido", Toast.LENGTH_SHORT).show()
         Log.d("STREAM", "Streaming detenido")
+
+        // 🗑️ Forzar limpieza de memoria
+        System.gc()
     }
 
     private fun switchCamera() {
@@ -504,40 +587,7 @@ class WifiActivity : AppCompatActivity(), SurfaceHolder.Callback {
         releaseCamera()
     }
 
-    // AsyncTask para enviar frames
-    private inner class SendFrameTask : AsyncTask<ByteArray, Void, Void>() {
-        override fun doInBackground(vararg params: ByteArray?): Void? {
-            try {
-                val frameData = params[0] ?: return null
-
-                val parameters = camera?.parameters
-                val width = parameters?.previewSize?.width ?: 640
-                val height = parameters?.previewSize?.height ?: 480
-
-                val yuvImage = YuvImage(frameData, ImageFormat.NV21, width, height, null)
-                val out = ByteArrayOutputStream()
-
-                // Calidad de compresión según configuración
-                val quality = when {
-                    spinnerQuality.selectedItem.toString().contains("Alta") -> 80
-                    spinnerQuality.selectedItem.toString().contains("Media") -> 50
-                    else -> 30
-                }
-
-                yuvImage.compressToJpeg(Rect(0, 0, width, height), quality, out)
-
-                val jpegData = out.toByteArray()
-                val base64Image = Base64.encodeToString(jpegData, Base64.DEFAULT)
-
-                sendFrameToServer(base64Image)
-
-            } catch (e: Exception) {
-                Log.e("STREAM", "Error enviando frame: ${e.message}")
-            }
-            return null
-        }
-    }
-
+    // 🔧 MÉTODO SIMPLIFICADO: sendFrameToServer
     private fun sendFrameToServer(base64Image: String) {
         try {
             val url = URL(streamUrl)
@@ -545,29 +595,34 @@ class WifiActivity : AppCompatActivity(), SurfaceHolder.Callback {
             connection.requestMethod = "POST"
             connection.setRequestProperty("Content-Type", "application/json")
             connection.doOutput = true
-            connection.connectTimeout = 5000
-            connection.readTimeout = 5000
+            connection.connectTimeout = 3000 // Timeout más corto
+            connection.readTimeout = 3000
 
-            val json = JSONObject().apply {
-                put("frame", base64Image)
-                put("timestamp", System.currentTimeMillis())
-                put("device_id", "android_${System.currentTimeMillis()}")
-            }
+            // 🎯 JSON más simple para ahorrar memoria
+            val jsonString = """{"frame":"$base64Image","timestamp":${System.currentTimeMillis()},"device_id":"android_stream"}"""
 
             val os = connection.outputStream
-            os.write(json.toString().toByteArray())
+            os.write(jsonString.toByteArray())
             os.flush()
             os.close()
 
             val responseCode = connection.responseCode
             if (responseCode == 200) {
-                Log.d("STREAM", "Frame enviado correctamente")
+                Log.d("STREAM", "Frame enviado OK")
             } else {
-                Log.w("STREAM", "Error enviando frame: $responseCode")
+                Log.w("STREAM", "Error response: $responseCode")
             }
 
+            connection.disconnect()
+
+        } catch (e: OutOfMemoryError) {
+            Log.e("STREAM", "OutOfMemoryError en envío: ${e.message}")
+            runOnUiThread {
+                stopStreaming()
+                Toast.makeText(this, "⚠️ Sin memoria disponible", Toast.LENGTH_LONG).show()
+            }
         } catch (e: Exception) {
-            Log.e("STREAM", "Error enviando frame: ${e.message}")
+            Log.e("STREAM", "Error enviando al servidor: ${e.message}")
         }
     }
 
@@ -601,6 +656,9 @@ class WifiActivity : AppCompatActivity(), SurfaceHolder.Callback {
         stopStreaming()
         stopTimeUpdater()
         releaseCamera()
+
+        // 🗑️ Limpieza final
+        System.gc()
     }
 
     override fun onPause() {
