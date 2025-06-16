@@ -352,7 +352,7 @@ class UsbActivity : AppCompatActivity() {
 
         val options = optionsList.toTypedArray()
 
-        AlertDialog.Builder(this, R.style.CustomDialogTheme)
+        AlertDialog.Builder(this)
             .setTitle("Opciones para: ${fileItem.name}")
             .setItems(options) { _, which ->
                 when (options[which]) {
@@ -368,6 +368,7 @@ class UsbActivity : AppCompatActivity() {
             }
             .setNegativeButton("Cancelar", null)
             .show()
+
     }
 
     private fun playAudio(uri: Uri) {

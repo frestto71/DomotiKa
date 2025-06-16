@@ -76,6 +76,11 @@ class MainActivity : AppCompatActivity() {
         val cardView4 = findViewById<MaterialCardView>(R.id.cardView4)
         val cardView5 = findViewById<MaterialCardView>(R.id.cardView5)
 
+        val fechaTextView = findViewById<TextView>(R.id.fechaText)
+        val dateFormat = SimpleDateFormat("EEEE, dd MMM", Locale("es", "MX"))
+        val fechaActual = dateFormat.format(Date())
+        fechaTextView.text = fechaActual
+
 
 
         setLiftEffect(cardView1)

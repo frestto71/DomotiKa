@@ -13,6 +13,7 @@
         android:orientation="vertical"
         android:spacing="16dp">
 
+
         <!-- Encabezado -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"

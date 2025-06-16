@@ -68,4 +68,5 @@
         android:padding="8dp"
         android:clipToPadding="false"
         android:listSelector="?android:attr/selectableItemBackground"/>
+
 </LinearLayout>

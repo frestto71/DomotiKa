@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.domotika"
     xmlns:tools="http://schemas.android.com/tools">
 
     <!-- 🔐 PERMISOS VARIOS -->
@@ -18,10 +19,28 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <!-- 📷 PERMISOS PARA STREAMING Y CÁMARA -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
     <!-- Features -->
     <uses-feature android:name="android.hardware.usb.host" />
     <uses-feature android:name="android.hardware.bluetooth" android:required="true" />
     <uses-feature android:name="android.hardware.nfc" android:required="true" />
+
+    <!-- 📷 CARACTERÍSTICAS DE CÁMARA -->
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
+    <uses-feature
+        android:name="android.hardware.camera.autofocus"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera.flash"
+        android:required="false" />
 
     <application
         android:requestLegacyExternalStorage="true"
@@ -32,20 +51,42 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Domotika">
+        android:theme="@style/Theme.Domotika"
+        android:usesCleartextTraffic="true">
 
-        <!-- Otras actividades de tu app -->
+        <!-- 🚀 LOGIN - PANTALLA INICIAL (SOLO ESTA TIENE LAUNCHER) -->
+        <activity android:name=".LoginActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- 📝 PANTALLA DE REGISTRO -->
+        <activity android:name=".RegisterActivity" />
+
+        <!-- 🏠 ACTIVIDAD PRINCIPAL (SIN LAUNCHER) -->
+        <activity android:name=".MainActivity" />
+
+        <!-- 🔧 Otras actividades de tu app -->
         <activity android:name=".UsbActivity" android:exported="true" />
         <activity android:name=".CameraPlayerActivity" />
         <activity android:name=".InfraredControlActivity" />
         <activity android:name=".BluetoothActivity" />
         <activity android:name=".InfraredActivity" />
-        <activity android:name=".WifiActivity" />
 
-        <!-- NFC Activity -->
+        <!-- 📷 WIFI ACTIVITY CON CONFIGURACIÓN DE STREAMING -->
+        <activity
+            android:name=".WifiActivity"
+            android:screenOrientation="portrait"
+            android:keepScreenOn="true" />
+
+        <!-- 📱 NFC Activity -->
         <activity
             android:name=".NfcActivity"
-            android:exported="true">
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan">
             <!-- Recibir tags NDEF con MIME text/plain -->
             <intent-filter>
                 <action android:name="android.nfc.action.NDEF_DISCOVERED"/>
@@ -59,21 +100,12 @@
             </intent-filter>
         </activity>
 
-        <!-- ToolsActivity que gestiona lectura/escritura NFC -->
+        <!-- 🛠️ ToolsActivity que gestiona lectura/escritura NFC -->
         <activity
             android:name=".ToolsActivity"
             android:exported="true" />
 
-        <!-- Actividad principal -->
-        <activity android:name=".MainActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
-        </activity>
-
-        <!-- Servicio HCE para emulación APDU -->
+        <!-- 🎴 Servicio HCE para emulación APDU -->
         <service
             android:name=".hce.CardEmulationService"
             android:exported="true"
@@ -85,7 +117,6 @@
                 android:name="android.nfc.cardemulation.host_apdu_service"
                 android:resource="@xml/hce_service"/>
         </service>
-
 
     </application>
 </manifest>
