@@ -7,4 +7,26 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="primary_color">#4CAF50</color>
+    <color name="secondary_color">#2196F3</color>
+    <color name="accent_color">#FF9800</color>
+
+    <!-- Colores de fondo -->
+    <color name="background_dark">#1A1A1A</color>
+    <color name="card_background">#2E2E2E</color>
+
+    <!-- Colores de texto -->
+    <color name="text_primary">#FFFFFF</color>
+    <color name="text_secondary">#BBBBBB</color>
+    <color name="text_hint">#AAAAAA</color>
+
+    <!-- Colores de estado -->
+    <color name="success_color">#4CAF50</color>
+    <color name="error_color">#F44336</color>
+    <color name="warning_color">#FFC107</color>
+
+    <!-- Gradiente -->
+    <color name="gradient_start">#667eea</color>
+    <color name="gradient_end">#764ba2</color>
 </resources>

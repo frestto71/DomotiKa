@@ -5,46 +5,51 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#1A1A1A"
-    android:padding="20dp">
+    android:background="@drawable/bg_main_gradient"
+    android:padding="16dp">
 
-    <!-- Card Encabezado -->
-    <androidx.cardview.widget.CardView
+    <!-- Card Encabezado - ELEGANTE -->
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:layout_marginTop="20dp"
-        app:cardCornerRadius="20dp"
-        app:cardElevation="8dp"
-        app:cardBackgroundColor="#2E2E2E">
+        android:layout_marginBottom="12dp"
+        android:layout_marginTop="8dp"
+        app:cardCornerRadius="24dp"
+        app:cardElevation="12dp"
+        app:cardBackgroundColor="#1A1A1A"
+        android:alpha="0.95">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="20dp"
-            android:gravity="center_horizontal">
+            android:gravity="center_horizontal"
+            android:background="@drawable/bg_glassmorphism">
 
             <TextView
                 android:id="@+id/titleCamera"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="📹 Cámara de Seguridad"
-                android:textColor="#4CAF50"
-                android:textSize="24sp"
+                android:textColor="#b2dfdb"
+                android:textSize="22sp"
                 android:textStyle="bold"
-                android:layout_marginBottom="8dp" />
+                android:layout_marginBottom="8dp"
+                android:fontFamily="sans-serif-medium"
+                android:letterSpacing="0.05" />
 
             <TextView
                 android:id="@+id/tvStreamStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Estado: Desconectado"
-                android:textColor="#BBBBBB"
+                android:textColor="#9E9E9E"
                 android:textSize="14sp"
-                android:layout_marginBottom="12dp" />
+                android:layout_marginBottom="8dp"
+                android:fontFamily="sans-serif-light" />
 
-            <!-- Indicador de streaming -->
+            <!-- Indicador de streaming - ELEGANTE -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -53,9 +58,9 @@
 
                 <View
                     android:id="@+id/statusIndicator"
-                    android:layout_width="12dp"
-                    android:layout_height="12dp"
-                    android:background="@drawable/circle_indicator"
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:background="@drawable/status_dot_active"
                     android:layout_marginEnd="8dp" />
 
                 <TextView
@@ -63,22 +68,25 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="00:00:00"
-                    android:textColor="#FFFFFF"
+                    android:textColor="#ffffff"
                     android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif-condensed" />
             </LinearLayout>
         </LinearLayout>
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 
-    <!-- Vista de la cámara -->
-    <androidx.cardview.widget.CardView
+    <!-- Vista de la cámara - ELEGANTE -->
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:layout_marginBottom="16dp"
-        app:cardCornerRadius="16dp"
-        app:cardElevation="8dp"
-        app:cardBackgroundColor="#000000">
+        android:layout_marginBottom="12dp"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="16dp"
+        app:cardBackgroundColor="#000000"
+        app:strokeColor="#2A2A2A"
+        app:strokeWidth="1dp">
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -97,23 +105,36 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:gravity="center"
-                android:background="#222222"
+                android:background="#1E1E1E"
                 android:visibility="visible">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="📷"
-                    android:textSize="64sp"
-                    android:layout_marginBottom="16dp" />
+                    android:textSize="72sp"
+                    android:layout_marginBottom="20dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Presiona 'Iniciar Stream' para comenzar"
-                    android:textColor="#AAAAAA"
+                    android:text="🔑 Genera tu token abajo y presiona 'Iniciar Stream'"
+                    android:textColor="#9E9E9E"
                     android:textSize="16sp"
-                    android:gravity="center" />
+                    android:gravity="center"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:fontFamily="sans-serif-light" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="El token permitirá que otros vean tu stream"
+                    android:textColor="#b2dfdb"
+                    android:textSize="14sp"
+                    android:gravity="center"
+                    android:fontFamily="sans-serif-light" />
             </LinearLayout>
 
             <!-- Overlay de información en vivo -->
@@ -132,9 +153,10 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="🔴 EN VIVO"
-                    android:textColor="#FF4444"
+                    android:textColor="#FF5252"
                     android:textStyle="bold"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:fontFamily="sans-serif-medium" />
 
                 <TextView
                     android:id="@+id/tvViewerCount"
@@ -168,79 +190,82 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
                     android:src="@drawable/ic_switch_camera"
-                    app:backgroundTint="#4CAF50"
+                    app:backgroundTint="#64B5F6"
                     app:tint="@android:color/white"
-                    app:fabSize="mini" />
+                    app:fabSize="mini"
+                    app:elevation="8dp" />
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/fabFlashlight"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_flashlight"
-                    app:backgroundTint="#FFC107"
+                    app:backgroundTint="#FFB74D"
                     app:tint="@android:color/white"
-                    app:fabSize="mini" />
+                    app:fabSize="mini"
+                    app:elevation="8dp" />
             </LinearLayout>
         </FrameLayout>
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 
-    <!-- Controles principales -->
+    <!-- Controles principales - ELEGANTES -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginBottom="16dp">
+        android:layout_marginBottom="12dp"
+        android:weightSum="2">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnStartStream"
             android:layout_width="0dp"
             android:layout_height="56dp"
             android:layout_weight="1"
-            android:text="▶ Iniciar Stream"
+            android:text="Iniciar Stream"
             android:textColor="#ffffff"
             android:textStyle="bold"
-            android:layout_marginEnd="8dp"
-            app:backgroundTint="#4CAF50"
-            app:cornerRadius="12dp"
-            app:rippleColor="#2E7D32" />
+            android:textSize="14sp"
+            android:layout_marginEnd="6dp"
+            app:backgroundTint="#64B5F6"
+            app:cornerRadius="16dp"
+            app:rippleColor="#42A5F5"
+            app:elevation="8dp"
+            android:fontFamily="sans-serif-medium" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnStopStream"
             android:layout_width="0dp"
             android:layout_height="56dp"
             android:layout_weight="1"
-            android:text="⏹ Detener Stream"
+            android:text="Detener Stream"
             android:textColor="#ffffff"
             android:textStyle="bold"
-            android:layout_marginStart="8dp"
+            android:textSize="14sp"
+            android:layout_marginStart="6dp"
             android:enabled="false"
-            app:backgroundTint="#F44336"
-            app:cornerRadius="12dp"
-            app:rippleColor="#C62828" />
+            app:backgroundTint="#F06292"
+            app:cornerRadius="16dp"
+            app:rippleColor="#EC407A"
+            app:elevation="8dp"
+            android:fontFamily="sans-serif-medium" />
     </LinearLayout>
 
-    <!-- Configuraciones avanzadas -->
-    <androidx.cardview.widget.CardView
+    <!-- Configuraciones de calidad y FPS - ELEGANTE -->
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="16dp"
-        app:cardElevation="4dp"
-        app:cardBackgroundColor="#2E2E2E">
+        android:layout_marginBottom="12dp"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="8dp"
+        app:cardBackgroundColor="#2A2A2A"
+        app:strokeColor="#3A3A3A"
+        app:strokeWidth="1dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="⚙️ Configuraciones"
-                android:textColor="#4CAF50"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="12dp" />
+            android:padding="20dp">
 
             <!-- Calidad del video -->
             <LinearLayout
@@ -248,19 +273,21 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
-                android:layout_marginBottom="8dp">
+                android:layout_marginBottom="12dp">
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Calidad:"
-                    android:textColor="#FFFFFF"
-                    android:textSize="14sp" />
+                    android:textColor="#b2dfdb"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif-medium" />
 
                 <Spinner
                     android:id="@+id/spinnerQuality"
-                    android:layout_width="120dp"
+                    android:layout_width="140dp"
                     android:layout_height="40dp"
                     android:background="@drawable/spinner_background" />
             </LinearLayout>
@@ -270,85 +297,142 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:layout_marginBottom="8dp">
+                android:gravity="center_vertical">
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="FPS:"
-                    android:textColor="#FFFFFF"
-                    android:textSize="14sp" />
+                    android:textColor="#b2dfdb"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif-medium" />
 
                 <SeekBar
                     android:id="@+id/seekBarFPS"
-                    android:layout_width="120dp"
+                    android:layout_width="100dp"
                     android:layout_height="wrap_content"
-                    android:max="30"
-                    android:progress="15"
-                    android:progressTint="#4CAF50"
-                    android:thumbTint="#4CAF50" />
+                    android:max="10"
+                    android:progress="3"
+                    android:progressTint="#64B5F6"
+                    android:thumbTint="#64B5F6" />
 
                 <TextView
                     android:id="@+id/tvFPSValue"
-                    android:layout_width="40dp"
+                    android:layout_width="50dp"
                     android:layout_height="wrap_content"
-                    android:text="15"
+                    android:text="3 FPS"
                     android:textColor="#FFFFFF"
                     android:textSize="14sp"
+                    android:textStyle="bold"
                     android:gravity="center"
-                    android:layout_marginStart="8dp" />
+                    android:layout_marginStart="8dp"
+                    android:fontFamily="sans-serif-medium" />
             </LinearLayout>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
 
-            <!-- Botones adicionales -->
+    <!-- 🆕 SECCIÓN DE TOKEN ELEGANTE -->
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="12dp"
+        app:cardBackgroundColor="#2A2A2A"
+        app:strokeColor="#b2dfdb"
+        app:strokeWidth="1dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TOKEN DE STREAM"
+                android:textColor="#b2dfdb"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:layout_gravity="center"
+                android:layout_marginBottom="12dp"
+                android:fontFamily="sans-serif-medium"
+                android:letterSpacing="0.1" />
+
+            <TextView
+                android:id="@+id/tvStreamToken"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Token: No generado"
+                android:textColor="#64B5F6"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:layout_marginBottom="16dp"
+                android:fontFamily="monospace"
+                android:background="#1A64B5F6"
+                android:padding="12dp"
+                android:minHeight="45dp" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="8dp">
+                android:weightSum="2">
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnSettings"
+                    android:id="@+id/btnGenerateToken"
                     android:layout_width="0dp"
-                    android:layout_height="40dp"
+                    android:layout_height="48dp"
                     android:layout_weight="1"
-                    android:text="⚙ Ajustes"
-                    android:textColor="#ffffff"
+                    android:layout_marginEnd="6dp"
+                    android:text="Generar Token"
                     android:textSize="12sp"
-                    android:layout_marginEnd="4dp"
-                    app:backgroundTint="#607D8B"
-                    app:cornerRadius="8dp"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
+                    android:textColor="#ffffff"
+                    android:textStyle="bold"
+                    app:backgroundTint="#64B5F6"
+                    app:cornerRadius="16dp"
+                    app:elevation="6dp"
+                    android:fontFamily="sans-serif-medium" />
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnViewers"
+                    android:id="@+id/btnCopyToken"
                     android:layout_width="0dp"
-                    android:layout_height="40dp"
+                    android:layout_height="48dp"
                     android:layout_weight="1"
-                    android:text="👁 Visores"
-                    android:textColor="#ffffff"
+                    android:layout_marginStart="6dp"
+                    android:text="Copiar Token"
                     android:textSize="12sp"
-                    android:layout_marginStart="4dp"
-                    android:layout_marginEnd="4dp"
-                    app:backgroundTint="#607D8B"
-                    app:cornerRadius="8dp"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
+                    android:textColor="#ffffff"
+                    android:textStyle="bold"
+                    app:backgroundTint="#81C784"
+                    app:cornerRadius="16dp"
+                    app:elevation="6dp"
+                    android:enabled="false"
+                    android:fontFamily="sans-serif-medium" />
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnRecord"
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_weight="1"
-                    android:text="📹 Grabar"
-                    android:textColor="#ffffff"
-                    android:textSize="12sp"
-                    android:layout_marginStart="4dp"
-                    app:backgroundTint="#E91E63"
-                    app:cornerRadius="8dp"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
             </LinearLayout>
         </LinearLayout>
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Botón para ver streams de otros - ELEGANTE -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnOpenViewer"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:text="Ver Streams de Otros"
+        android:textColor="#ffffff"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:backgroundTint="#FF7043"
+        app:cornerRadius="20dp"
+        app:icon="@drawable/ic_tv"
+        app:iconGravity="textStart"
+        app:iconPadding="8dp"
+        app:elevation="8dp"
+        android:fontFamily="sans-serif-medium" />
 
 </LinearLayout>

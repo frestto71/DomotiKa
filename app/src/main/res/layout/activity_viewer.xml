@@ -1,0 +1,564 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_main_gradient"
+    android:fitsSystemWindows="false">
+
+    <!-- PANTALLA DE CONEXIÓN -->
+    <ScrollView
+        android:id="@+id/connectionLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:visibility="visible">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="24dp"
+            android:minHeight="600dp">
+
+            <!-- Logo/Título Elegante -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="32dp"
+                app:cardCornerRadius="32dp"
+                app:cardElevation="16dp"
+                app:cardBackgroundColor="#1A1A1A"
+                android:alpha="0.95">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:padding="32dp"
+                    android:background="@drawable/bg_glassmorphism">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="📺"
+                        android:textSize="64sp"
+                        android:layout_marginBottom="16dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Stream Viewer"
+                        android:textColor="#b2dfdb"
+                        android:textSize="28sp"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="8dp"
+                        android:fontFamily="sans-serif-medium"
+                        android:letterSpacing="0.05" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Visualizador Inteligente"
+                        android:textColor="#9E9E9E"
+                        android:textSize="14sp"
+                        android:fontFamily="sans-serif-light" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ingresa el token del stream que quieres ver"
+                android:textColor="#9E9E9E"
+                android:textSize="16sp"
+                android:gravity="center"
+                android:layout_marginBottom="32dp"
+                android:fontFamily="sans-serif-light" />
+
+            <!-- Card de conexión elegante -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginBottom="20dp"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="12dp"
+                app:cardBackgroundColor="#2A2A2A"
+                app:strokeColor="#3A3A3A"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="24dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="🔑 Token del Stream"
+                        android:textColor="#b2dfdb"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="16dp"
+                        android:fontFamily="sans-serif-medium" />
+
+                    <EditText
+                        android:id="@+id/etToken"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:hint="Ej: MOD-123456-7890"
+                        android:textColor="#FFFFFF"
+                        android:textColorHint="#9E9E9E"
+                        android:background="@drawable/token_background"
+                        android:padding="16dp"
+                        android:fontFamily="monospace"
+                        android:textSize="16sp"
+                        android:maxLines="1"
+                        android:inputType="textNoSuggestions"
+                        android:layout_marginBottom="20dp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:layout_marginBottom="16dp">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnConnect"
+                            android:layout_width="0dp"
+                            android:layout_height="56dp"
+                            android:layout_weight="1"
+                            android:text="Conectar"
+                            android:textColor="#ffffff"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:layout_marginEnd="8dp"
+                            app:backgroundTint="#64B5F6"
+                            app:cornerRadius="16dp"
+                            app:elevation="8dp"
+                            android:fontFamily="sans-serif-medium" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnStreams"
+                            android:layout_width="0dp"
+                            android:layout_height="56dp"
+                            android:layout_weight="1"
+                            android:text="Streams"
+                            android:textColor="#ffffff"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:layout_marginStart="8dp"
+                            app:backgroundTint="#81C784"
+                            app:cornerRadius="16dp"
+                            app:elevation="8dp"
+                            android:fontFamily="sans-serif-medium" />
+
+                    </LinearLayout>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnBack"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:text="⬅️ Volver al Menú Principal"
+                        android:textColor="#ffffff"
+                        android:textSize="14sp"
+                        app:backgroundTint="#F06292"
+                        app:cornerRadius="16dp"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:fontFamily="sans-serif-medium" />
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Lista de streams activos elegante -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:minHeight="200dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="8dp"
+                app:cardBackgroundColor="#2A2A2A"
+                app:strokeColor="#3A3A3A"
+                app:strokeWidth="1dp">
+
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxHeight="300dp">
+
+                    <LinearLayout
+                        android:id="@+id/streamsLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="20dp"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="📡 Streams Disponibles"
+                            android:textColor="#b2dfdb"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="16dp"
+                            android:fontFamily="sans-serif-medium" />
+
+                        <!-- Los streams se agregarán dinámicamente aquí -->
+
+                    </LinearLayout>
+                </ScrollView>
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- PANTALLA DE CARGA ELEGANTE -->
+    <LinearLayout
+        android:id="@+id/loadingLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:background="@drawable/bg_main_gradient"
+        android:visibility="gone">
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="24dp"
+            app:cardElevation="16dp"
+            app:cardBackgroundColor="#1A1A1A"
+            android:alpha="0.95">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="32dp"
+                android:background="@drawable/bg_glassmorphism">
+
+                <ProgressBar
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:indeterminateTint="#64B5F6"
+                    android:layout_marginBottom="24dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🔗 Conectando al stream..."
+                    android:textColor="#b2dfdb"
+                    android:textSize="18sp"
+                    android:layout_marginBottom="8dp"
+                    android:fontFamily="sans-serif-medium" />
+
+                <TextView
+                    android:id="@+id/tvLoadingStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Obteniendo primer frame..."
+                    android:textColor="#9E9E9E"
+                    android:textSize="14sp"
+                    android:fontFamily="sans-serif-light" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
+
+    <!-- CONTENEDOR DEL STREAM (VERTICAL/HORIZONTAL) -->
+    <LinearLayout
+        android:id="@+id/streamContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@drawable/bg_main_gradient"
+        android:visibility="gone">
+
+        <!-- IMAGEN DEL STREAM (ADAPTABLE) -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/videoCard"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_margin="16dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="16dp"
+            app:cardBackgroundColor="#000000"
+            app:strokeColor="#2A2A2A"
+            app:strokeWidth="1dp">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/imageStreamView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitCenter"
+                    android:background="#000000" />
+
+                <!-- Botón de orientación flotante -->
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fabOrientation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|end"
+                    android:layout_margin="16dp"
+                    app:backgroundTint="#64B5F6"
+                    app:tint="@android:color/white"
+                    app:fabSize="mini"
+                    app:elevation="8dp" />
+
+                <!-- HINT PARA CONTROLES -->
+                <TextView
+                    android:id="@+id/tvHint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|center_horizontal"
+                    android:layout_marginBottom="16dp"
+                    android:text="👆 Toca para mostrar/ocultar controles"
+                    android:textColor="#80FFFFFF"
+                    android:textSize="12sp"
+                    android:background="#80000000"
+                    android:padding="8dp"
+                    android:visibility="visible"
+                    android:fontFamily="sans-serif-light" />
+            </FrameLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- PANEL DE INFORMACIÓN Y CONTROLES -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/controlsCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="12dp"
+            app:cardBackgroundColor="#2A2A2A"
+            app:strokeColor="#3A3A3A"
+            app:strokeWidth="1dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <!-- Estado superior -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="16dp">
+
+                    <TextView
+                        android:id="@+id/tvStatus"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="🔴 En vivo"
+                        android:textColor="#b2dfdb"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:fontFamily="sans-serif-medium" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnDisconnect"
+                        android:layout_width="wrap_content"
+                        android:layout_height="48dp"
+                        android:text="Desconectar"
+                        android:textColor="#ffffff"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        app:backgroundTint="#F06292"
+                        app:cornerRadius="16dp"
+                        app:elevation="6dp"
+                        android:fontFamily="sans-serif-medium" />
+
+                </LinearLayout>
+
+                <!-- Información del stream en grid -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="3">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="⚡ FPS"
+                            android:textColor="#b2dfdb"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvFPS"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0"
+                            android:textColor="#FFFFFF"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:fontFamily="sans-serif-condensed" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="📊 Frames"
+                            android:textColor="#b2dfdb"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvFrameCount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0"
+                            android:textColor="#FFFFFF"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:fontFamily="sans-serif-condensed" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="⏱️ Tiempo"
+                            android:textColor="#b2dfdb"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvConnectionTime"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="00:00"
+                            android:textColor="#FFFFFF"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:fontFamily="sans-serif-condensed" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
+
+    <!-- CONTROLES OVERLAY PARA MODO FULLSCREEN -->
+    <LinearLayout
+        android:id="@+id/overlayControls"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:orientation="vertical"
+        android:background="#80000000"
+        android:padding="16dp"
+        android:visibility="gone">
+
+        <!-- Información superior -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/tvStatusOverlay"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="🔴 En vivo"
+                android:textColor="#b2dfdb"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-medium" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnDisconnectOverlay"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:text="Desconectar"
+                android:textColor="#ffffff"
+                android:textSize="12sp"
+                app:backgroundTint="#F06292"
+                app:cornerRadius="20dp"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:fontFamily="sans-serif-medium" />
+
+        </LinearLayout>
+
+        <!-- Información del stream -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:id="@+id/tvFPSOverlay"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="FPS: 0"
+                android:textColor="#E0E0E0"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/tvFrameCountOverlay"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Frames: 0"
+                android:textColor="#E0E0E0"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/tvConnectionTimeOverlay"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Tiempo: 00:00"
+                android:textColor="#E0E0E0"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</FrameLayout>

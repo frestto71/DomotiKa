@@ -3,33 +3,41 @@
     package="com.example.domotika"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- 🔐 PERMISOS VARIOS -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <!-- 🔐 PERMISOS DE CONECTIVIDAD -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.NEARBY_WIFI_DEVICES" tools:ignore="ProtectedPermissions" />
+
+    <!-- 📶 PERMISOS BLUETOOTH -->
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
     <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
+
+    <!-- 📍 PERMISOS DE UBICACIÓN -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.NEARBY_WIFI_DEVICES" tools:ignore="ProtectedPermissions" />
-    <uses-permission android:name="android.permission.NFC" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
-    <uses-permission android:name="android.permission.INTERNET" />
 
-    <!-- 📷 PERMISOS PARA STREAMING Y CÁMARA -->
+    <!-- 📷 PERMISOS MULTIMEDIA -->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
+    <!-- 💾 PERMISOS DE ALMACENAMIENTO -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+
+    <!-- 🔔 PERMISOS DEL SISTEMA -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.NFC" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
-    <!-- Features -->
-    <uses-feature android:name="android.hardware.usb.host" />
+    <!-- 🔧 CARACTERÍSTICAS DE HARDWARE REQUERIDAS -->
     <uses-feature android:name="android.hardware.bluetooth" android:required="true" />
     <uses-feature android:name="android.hardware.nfc" android:required="true" />
+    <uses-feature android:name="android.hardware.usb.host" />
 
     <!-- 📷 CARACTERÍSTICAS DE CÁMARA -->
     <uses-feature
@@ -54,8 +62,9 @@
         android:theme="@style/Theme.Domotika"
         android:usesCleartextTraffic="true">
 
-        <!-- 🚀 LOGIN - PANTALLA INICIAL (SOLO ESTA TIENE LAUNCHER) -->
-        <activity android:name=".LoginActivity"
+        <!-- 🚀 ACTIVIDAD PRINCIPAL DE ENTRADA -->
+        <activity
+            android:name=".LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -63,26 +72,37 @@
             </intent-filter>
         </activity>
 
-        <!-- 📝 PANTALLA DE REGISTRO -->
+        <!-- 🏠 ACTIVIDADES PRINCIPALES -->
+        <activity android:name=".MainActivity" />
         <activity android:name=".RegisterActivity" />
 
-        <!-- 🏠 ACTIVIDAD PRINCIPAL (SIN LAUNCHER) -->
-        <activity android:name=".MainActivity" />
-
-        <!-- 🔧 Otras actividades de tu app -->
+        <!-- 🔧 ACTIVIDADES DE CONTROL Y CONFIGURACIÓN -->
         <activity android:name=".UsbActivity" android:exported="true" />
-        <activity android:name=".CameraPlayerActivity" />
-        <activity android:name=".InfraredControlActivity" />
         <activity android:name=".BluetoothActivity" />
         <activity android:name=".InfraredActivity" />
+        <activity android:name=".InfraredControlActivity" />
+        <activity
+            android:name=".ToolsActivity"
+            android:exported="true" />
 
-        <!-- 📷 WIFI ACTIVITY CON CONFIGURACIÓN DE STREAMING -->
+        <!-- 📶 ACTIVIDADES DE CONECTIVIDAD -->
         <activity
             android:name=".WifiActivity"
             android:screenOrientation="portrait"
             android:keepScreenOn="true" />
 
-        <!-- 📱 NFC Activity -->
+        <!-- 📷 ACTIVIDADES MULTIMEDIA -->
+        <activity android:name=".CameraPlayerActivity" />
+
+        <!-- 📺 ACTIVIDAD DE VISUALIZACIÓN (OPTIMIZADA PARA STREAMING) -->
+        <activity
+            android:name=".ViewerActivity"
+            android:exported="false"
+            android:screenOrientation="landscape"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:keepScreenOn="true" />
+
+        <!-- 📱 ACTIVIDAD NFC CON FILTROS DE INTENT -->
         <activity
             android:name=".NfcActivity"
             android:exported="true"
@@ -100,12 +120,7 @@
             </intent-filter>
         </activity>
 
-        <!-- 🛠️ ToolsActivity que gestiona lectura/escritura NFC -->
-        <activity
-            android:name=".ToolsActivity"
-            android:exported="true" />
-
-        <!-- 🎴 Servicio HCE para emulación APDU -->
+        <!-- 🎴 SERVICIO HCE PARA EMULACIÓN DE TARJETAS -->
         <service
             android:name=".hce.CardEmulationService"
             android:exported="true"
