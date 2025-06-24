@@ -358,7 +358,6 @@ class ViewerActivity : AppCompatActivity() {
                         updateStatus("🔴 $streamName")
                         updateFPS()
                         frameCount++
-                        updateFrameCount()
                     }
 
                 } else {
@@ -418,10 +417,6 @@ class ViewerActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateFrameCount() {
-        tvFrameCount.text = "$frameCount"
-        tvFrameCountOverlay.text = "Frames: $frameCount"
-    }
 
     private fun startTimeUpdater() {
         timeRunnable = object : Runnable {
@@ -460,7 +455,6 @@ class ViewerActivity : AppCompatActivity() {
         tvFPS.text = "0"
         tvFPSOverlay.text = "FPS: 0"
         tvFrameCount.text = "0"
-        tvFrameCountOverlay.text = "Frames: 0"
         tvConnectionTime.text = "00:00"
         tvConnectionTimeOverlay.text = "Tiempo: 00:00"
     }

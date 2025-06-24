@@ -20,7 +20,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
-    <!-- 📷 PERMISOS MULTIMEDIA -->
+    <!-- 📷 PERMISOS MULTIMEDIA Y STREAMING -->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
@@ -32,12 +32,31 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.NFC" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
+    <!-- 🌙 PERMISOS PARA STREAMING EN BACKGROUND -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+
+    <!-- 📱 PERMISOS PARA DETECTAR ESTADO DE PANTALLA -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
+    <!-- 🎥 PERMISO PARA SERVICIO DE CÁMARA EN FOREGROUND (Android 9+) -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_CAMERA" />
 
     <!-- 🔧 CARACTERÍSTICAS DE HARDWARE REQUERIDAS -->
     <uses-feature android:name="android.hardware.bluetooth" android:required="true" />
     <uses-feature android:name="android.hardware.nfc" android:required="true" />
     <uses-feature android:name="android.hardware.usb.host" />
+
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <!-- Para Android 12+ -->
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+
 
     <!-- 📷 CARACTERÍSTICAS DE CÁMARA -->
     <uses-feature
@@ -73,26 +92,48 @@
         </activity>
 
         <!-- 🏠 ACTIVIDADES PRINCIPALES -->
-        <activity android:name=".MainActivity" />
-        <activity android:name=".RegisterActivity" />
+        <activity
+            android:name=".MainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".RegisterActivity"
+            android:exported="false" />
 
         <!-- 🔧 ACTIVIDADES DE CONTROL Y CONFIGURACIÓN -->
-        <activity android:name=".UsbActivity" android:exported="true" />
-        <activity android:name=".BluetoothActivity" />
-        <activity android:name=".InfraredActivity" />
-        <activity android:name=".InfraredControlActivity" />
+        <activity
+            android:name=".UsbActivity"
+            android:exported="true" />
+        <activity
+            android:name=".BluetoothActivity"
+            android:exported="false" />
+        <activity
+            android:name=".InfraredActivity"
+            android:exported="false" />
+        <activity
+            android:name=".InfraredControlActivity"
+            android:exported="false" />
         <activity
             android:name=".ToolsActivity"
             android:exported="true" />
 
-        <!-- 📶 ACTIVIDADES DE CONECTIVIDAD -->
+        <!-- 📶 ACTIVIDAD DE STREAMING WIFI (OPTIMIZADA PARA BACKGROUND) -->
         <activity
             android:name=".WifiActivity"
+            android:exported="false"
             android:screenOrientation="portrait"
-            android:keepScreenOn="true" />
+            android:keepScreenOn="true"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:launchMode="singleTask">
+            <!-- 🌙 Permitir que funcione con la pantalla apagada -->
+            <meta-data
+                android:name="android.app.background_mode"
+                android:value="true" />
+        </activity>
 
         <!-- 📷 ACTIVIDADES MULTIMEDIA -->
-        <activity android:name=".CameraPlayerActivity" />
+        <activity
+            android:name=".CameraPlayerActivity"
+            android:exported="false" />
 
         <!-- 📺 ACTIVIDAD DE VISUALIZACIÓN (OPTIMIZADA PARA STREAMING) -->
         <activity
@@ -100,7 +141,8 @@
             android:exported="false"
             android:screenOrientation="landscape"
             android:configChanges="orientation|screenSize|keyboardHidden"
-            android:keepScreenOn="true" />
+            android:keepScreenOn="true"
+            android:launchMode="singleTop" />
 
         <!-- 📱 ACTIVIDAD NFC CON FILTROS DE INTENT -->
         <activity
@@ -133,5 +175,43 @@
                 android:resource="@xml/hce_service"/>
         </service>
 
+        <!-- 🌙 SERVICIO PARA STREAMING EN BACKGROUND (OPCIONAL) -->
+        <service
+            android:name=".StreamingForegroundService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="camera">
+            <intent-filter>
+                <action android:name="com.example.domotika.STREAMING_SERVICE" />
+            </intent-filter>
+        </service>
+
+        <!-- 📱 RECEPTOR PARA EVENTOS DE PANTALLA Y SISTEMA -->
+        <receiver
+            android:name=".ScreenStateReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter android:priority="1000">
+                <action android:name="android.intent.action.SCREEN_OFF" />
+                <action android:name="android.intent.action.SCREEN_ON" />
+                <action android:name="android.intent.action.USER_PRESENT" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <!-- 🔋 RECEPTOR PARA OPTIMIZACIÓN DE BATERÍA -->
+        <receiver
+            android:name=".BatteryOptimizationReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BATTERY_OKAY" />
+                <action android:name="android.intent.action.BATTERY_LOW" />
+                <action android:name="android.intent.action.POWER_CONNECTED" />
+                <action android:name="android.intent.action.POWER_DISCONNECTED" />
+            </intent-filter>
+        </receiver>
+
     </application>
+
 </manifest>

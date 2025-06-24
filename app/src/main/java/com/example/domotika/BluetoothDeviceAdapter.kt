@@ -1,5 +1,6 @@
 package com.example.domotika
 
+import android.Manifest
 import android.bluetooth.BluetoothDevice
 import android.content.pm.PackageManager
 import android.view.LayoutInflater
@@ -11,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
 
 class BluetoothDeviceAdapter(
-    private var devices: List<BluetoothDevice>,
+    private var devices: MutableList<BluetoothDevice>,
     private val listener: OnDeviceClickListener
 ) : RecyclerView.Adapter<BluetoothDeviceAdapter.DeviceViewHolder>() {
 
@@ -20,7 +21,8 @@ class BluetoothDeviceAdapter(
     }
 
     fun updateDevices(newDevices: List<BluetoothDevice>) {
-        this.devices = newDevices
+        devices.clear()
+        devices.addAll(newDevices)
         notifyDataSetChanged()
     }
 
@@ -43,20 +45,87 @@ class BluetoothDeviceAdapter(
         private val btnConnect: MaterialButton = itemView.findViewById(R.id.btn_connect)
 
         fun bind(device: BluetoothDevice, listener: OnDeviceClickListener) {
-            if (ActivityCompat.checkSelfPermission(
-                    itemView.context,
-                    android.Manifest.permission.BLUETOOTH_CONNECT
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                deviceName.text = "Dispositivo Bluetooth"
-                deviceAddress.text = device.address
-            } else {
+            // Verificar permisos antes de acceder al nombre del dispositivo
+            val hasBluetoothPermission = ActivityCompat.checkSelfPermission(
+                itemView.context,
+                Manifest.permission.BLUETOOTH_CONNECT
+            ) == PackageManager.PERMISSION_GRANTED
+
+            if (hasBluetoothPermission) {
                 val name = device.name
-                deviceName.text = if (name != null && name.isNotEmpty()) name else "Dispositivo Desconocido"
-                deviceAddress.text = device.address
+                deviceName.text = if (!name.isNullOrEmpty()) name else "Dispositivo Desconocido"
+            } else {
+                deviceName.text = "Dispositivo Bluetooth"
             }
 
-            btnConnect.setOnClickListener { listener.onDeviceClick(device) }
+            deviceAddress.text = device.address
+
+            // Detectar tipo de dispositivo
+            val deviceType = detectDeviceType(device)
+
+            // Actualizar el estado del botón según el tipo y estado de emparejamiento
+            val bondState = device.bondState
+            when {
+                bondState == BluetoothDevice.BOND_BONDING -> {
+                    btnConnect.text = "Emparejando..."
+                    btnConnect.isEnabled = false
+                }
+                deviceType == "Audio" -> {
+                    btnConnect.text = if (bondState == BluetoothDevice.BOND_BONDED) "Configurar" else "Emparejar"
+                    btnConnect.isEnabled = true
+                }
+                bondState == BluetoothDevice.BOND_BONDED -> {
+                    btnConnect.text = "Conectar"
+                    btnConnect.isEnabled = true
+                }
+                else -> {
+                    btnConnect.text = "Vincular"
+                    btnConnect.isEnabled = true
+                }
+            }
+
+            btnConnect.setOnClickListener {
+                listener.onDeviceClick(device)
+            }
+        }
+
+        private fun detectDeviceType(device: BluetoothDevice): String {
+            if (ActivityCompat.checkSelfPermission(
+                    itemView.context,
+                    Manifest.permission.BLUETOOTH_CONNECT
+                ) != PackageManager.PERMISSION_GRANTED) {
+                return "Desconocido"
+            }
+
+            // Verificar por nombre del dispositivo
+            val deviceName = device.name?.lowercase() ?: ""
+            val audioKeywords = listOf("headphone", "headset", "earbuds", "speaker", "audio", "beats", "airpods", "sony", "bose", "jbl")
+
+            if (audioKeywords.any { deviceName.contains(it) }) {
+                return "Audio"
+            }
+
+            // Verificar por clase de dispositivo
+            device.bluetoothClass?.let { btClass ->
+                val majorDeviceClass = btClass.majorDeviceClass
+
+                when (majorDeviceClass) {
+                    android.bluetooth.BluetoothClass.Device.Major.AUDIO_VIDEO -> {
+                        return "Audio"
+                    }
+                    android.bluetooth.BluetoothClass.Device.Major.COMPUTER,
+                    android.bluetooth.BluetoothClass.Device.Major.PERIPHERAL,
+                    android.bluetooth.BluetoothClass.Device.Major.PHONE -> {
+                        return "Datos"
+                    }
+                    else -> {
+                        // Para otros tipos de dispositivos
+                        return "Datos"
+                    }
+                }
+            }
+
+            return "Datos"
         }
     }
 }

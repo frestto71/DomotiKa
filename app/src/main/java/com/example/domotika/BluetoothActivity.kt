@@ -3,6 +3,7 @@ package com.example.domotika
 import android.Manifest
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
+import android.bluetooth.BluetoothSocket
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -16,19 +17,28 @@ import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
 import android.app.Dialog
-import android.os.Handler
-import android.os.Looper
+import kotlinx.coroutines.*
+import java.io.IOException
+import java.util.*
 
 class BluetoothActivity : AppCompatActivity(), BluetoothDeviceAdapter.OnDeviceClickListener {
 
     companion object {
         private const val REQUEST_ENABLE_BT = 1
         private const val REQUEST_PERMISSIONS = 2
+
+        // UUIDs para diferentes tipos de dispositivos
+        private val SPP_UUID: UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB") // Serial Port Profile
+        private val GENERIC_UUID: UUID = UUID.fromString("00001801-0000-1000-8000-00805F9B34FB") // Generic Attribute
+        private val DEVICE_INFO_UUID: UUID = UUID.fromString("0000180A-0000-1000-8000-00805F9B34FB") // Device Information
+
+        private val COMMON_UUIDS = listOf(SPP_UUID, GENERIC_UUID, DEVICE_INFO_UUID)
     }
 
     private lateinit var bluetoothAdapter: BluetoothAdapter
@@ -40,6 +50,10 @@ class BluetoothActivity : AppCompatActivity(), BluetoothDeviceAdapter.OnDeviceCl
 
     private val discoveredDevices = HashSet<BluetoothDevice>()
     private lateinit var deviceAdapter: BluetoothDeviceAdapter
+
+    // Para manejar conexiones activas
+    private var bluetoothSocket: BluetoothSocket? = null
+    private var connectionJob: Job? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,13 +85,14 @@ class BluetoothActivity : AppCompatActivity(), BluetoothDeviceAdapter.OnDeviceCl
             addAction(BluetoothDevice.ACTION_FOUND)
             addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED)
             addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)
+            addAction(BluetoothDevice.ACTION_BOND_STATE_CHANGED)
         }
         registerReceiver(bluetoothReceiver, filter)
 
-        // Configurar botón para búsqueda (por si quiere reiniciar búsqueda)
+        // Configurar botón para búsqueda
         btnAddBluetooth.setOnClickListener { startBluetoothDiscovery() }
 
-        // Aquí llamamos a la función que chequea permisos y comienza descubrimiento si puede
+        // Chequear permisos y comenzar descubrimiento
         checkPermissionsAndStartDiscovery()
     }
 
@@ -136,6 +151,12 @@ class BluetoothActivity : AppCompatActivity(), BluetoothDeviceAdapter.OnDeviceCl
             return
         }
 
+        if (!bluetoothAdapter.isEnabled) {
+            val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
+            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT)
+            return
+        }
+
         if (bluetoothAdapter.isDiscovering) {
             bluetoothAdapter.cancelDiscovery()
         }
@@ -170,23 +191,241 @@ class BluetoothActivity : AppCompatActivity(), BluetoothDeviceAdapter.OnDeviceCl
             return
         }
 
+        // Cancelar descubrimiento para mejorar la conexión
+        if (bluetoothAdapter.isDiscovering) {
+            bluetoothAdapter.cancelDiscovery()
+        }
+
+        // Detectar tipo de dispositivo
+        val deviceClass = device.bluetoothClass
+        val deviceType = detectDeviceType(device, deviceClass)
+
+        when (deviceType) {
+            DeviceType.AUDIO_DEVICE -> handleAudioDevice(device)
+            DeviceType.DATA_DEVICE -> connectToDevice(device)
+            DeviceType.UNKNOWN -> showDeviceTypeDialog(device)
+        }
+    }
+
+    private enum class DeviceType {
+        AUDIO_DEVICE,
+        DATA_DEVICE,
+        UNKNOWN
+    }
+
+    private fun detectDeviceType(device: BluetoothDevice, deviceClass: android.bluetooth.BluetoothClass?): DeviceType {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+            return DeviceType.UNKNOWN
+        }
+
+        // Verificar por nombre del dispositivo
+        val deviceName = device.name?.lowercase() ?: ""
+        val audioKeywords = listOf("headphone", "headset", "earbuds", "speaker", "audio", "beats", "airpods", "sony", "bose", "jbl")
+
+        if (audioKeywords.any { deviceName.contains(it) }) {
+            return DeviceType.AUDIO_DEVICE
+        }
+
+        // Verificar por clase de dispositivo
+        deviceClass?.let { btClass ->
+            val majorDeviceClass = btClass.majorDeviceClass
+
+            when (majorDeviceClass) {
+                android.bluetooth.BluetoothClass.Device.Major.AUDIO_VIDEO -> {
+                    return DeviceType.AUDIO_DEVICE
+                }
+                android.bluetooth.BluetoothClass.Device.Major.COMPUTER,
+                android.bluetooth.BluetoothClass.Device.Major.PERIPHERAL,
+                android.bluetooth.BluetoothClass.Device.Major.PHONE -> {
+                    return DeviceType.DATA_DEVICE
+                }
+                else -> {
+                    // Para otros tipos de dispositivos no reconocidos
+                    return DeviceType.UNKNOWN
+                }
+            }
+        }
+
+        return DeviceType.UNKNOWN
+    }
+
+    private fun handleAudioDevice(device: BluetoothDevice) {
+        val deviceName = if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
+            device.name ?: "Dispositivo de audio"
+        } else {
+            "Dispositivo de audio"
+        }
+
+        AlertDialog.Builder(this)
+            .setTitle("Dispositivo de Audio Detectado")
+            .setMessage("$deviceName parece ser un dispositivo de audio (audífonos/altavoz).\n\n" +
+                    "Para conectar dispositivos de audio, ve a:\n" +
+                    "Configuración → Bluetooth → Buscar dispositivos\n\n" +
+                    "Los dispositivos de audio requieren emparejamiento del sistema Android.")
+            .setPositiveButton("Abrir Configuración") { _, _ ->
+                try {
+                    val intent = Intent(android.provider.Settings.ACTION_BLUETOOTH_SETTINGS)
+                    startActivity(intent)
+                } catch (e: Exception) {
+                    Toast.makeText(this, "No se pudo abrir la configuración", Toast.LENGTH_SHORT).show()
+                }
+            }
+            .setNegativeButton("Intentar Conectar Igual") { _, _ ->
+                connectToDevice(device)
+            }
+            .setNeutralButton("Cancelar", null)
+            .show()
+    }
+
+    private fun showDeviceTypeDialog(device: BluetoothDevice) {
+        val deviceName = if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
+            device.name ?: "Dispositivo desconocido"
+        } else {
+            "Dispositivo Bluetooth"
+        }
+
+        AlertDialog.Builder(this)
+            .setTitle("Tipo de Dispositivo")
+            .setMessage("¿Qué tipo de dispositivo es $deviceName?")
+            .setPositiveButton("Dispositivo de Audio") { _, _ ->
+                handleAudioDevice(device)
+            }
+            .setNegativeButton("Dispositivo de Datos") { _, _ ->
+                connectToDevice(device)
+            }
+            .setNeutralButton("Cancelar", null)
+            .show()
+    }
+
+    private fun connectToDevice(device: BluetoothDevice) {
+        val dialog = createConnectionDialog(device)
+        dialog.show()
+
+        connectionJob = CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val deviceName = if (ActivityCompat.checkSelfPermission(this@BluetoothActivity, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
+                    device.name ?: "Dispositivo Bluetooth"
+                } else {
+                    "Dispositivo Bluetooth"
+                }
+
+                // Actualizar UI: Verificando estado del dispositivo
+                withContext(Dispatchers.Main) {
+                    updateDialogStatus(dialog, "Verificando dispositivo...")
+                }
+
+                // Verificar si el dispositivo está emparejado
+                val bondState = device.bondState
+                if (bondState != BluetoothDevice.BOND_BONDED) {
+                    withContext(Dispatchers.Main) {
+                        updateDialogStatus(dialog, "Iniciando emparejamiento...")
+                    }
+
+                    if (ActivityCompat.checkSelfPermission(this@BluetoothActivity, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
+                        device.createBond()
+                    }
+
+                    // Esperar a que se complete el emparejamiento
+                    delay(3000)
+                }
+
+                // Actualizar UI: Estableciendo conexión
+                withContext(Dispatchers.Main) {
+                    updateDialogStatus(dialog, "Estableciendo conexión...")
+                }
+
+                // Crear socket Bluetooth - intentar múltiples UUIDs
+                bluetoothSocket = if (ActivityCompat.checkSelfPermission(this@BluetoothActivity, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
+                    tryCreateSocket(device)
+                } else {
+                    throw SecurityException("Sin permisos de Bluetooth")
+                }
+
+                // Intentar conectar
+                bluetoothSocket?.let { socket ->
+                    try {
+                        socket.connect()
+
+                        withContext(Dispatchers.Main) {
+                            updateDialogStatus(dialog, "Configurando comunicación...")
+                        }
+
+                        delay(1000)
+
+                        // Conexión exitosa
+                        withContext(Dispatchers.Main) {
+                            dialog.dismiss()
+                            Toast.makeText(this@BluetoothActivity, "¡$deviceName conectado con éxito!", Toast.LENGTH_LONG).show()
+
+                            // Aquí puedes agregar lógica adicional para manejar la conexión
+                            handleSuccessfulConnection(device, socket)
+                        }
+
+                    } catch (e: IOException) {
+                        // Intentar método alternativo de conexión
+                        withContext(Dispatchers.Main) {
+                            updateDialogStatus(dialog, "Intentando método alternativo...")
+                        }
+
+                        try {
+                            socket.close()
+
+                            // Método alternativo usando reflexión
+                            val method = device.javaClass.getMethod("createRfcommSocket", Int::class.javaPrimitiveType)
+                            bluetoothSocket = method.invoke(device, 1) as BluetoothSocket
+                            bluetoothSocket?.connect()
+
+                            withContext(Dispatchers.Main) {
+                                dialog.dismiss()
+                                Toast.makeText(this@BluetoothActivity, "¡$deviceName conectado con éxito!", Toast.LENGTH_LONG).show()
+                                handleSuccessfulConnection(device, bluetoothSocket!!)
+                            }
+
+                        } catch (e2: Exception) {
+                            withContext(Dispatchers.Main) {
+                                dialog.dismiss()
+                                Toast.makeText(this@BluetoothActivity, "Error al conectar: ${e2.message}", Toast.LENGTH_LONG).show()
+                            }
+                        }
+                    }
+                }
+
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    dialog.dismiss()
+                    Toast.makeText(this@BluetoothActivity, "Error de conexión: ${e.message}", Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+    }
+
+    private fun createConnectionDialog(device: BluetoothDevice): Dialog {
         val dialog = Dialog(this)
         dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
         dialog.setCancelable(false)
 
+        val deviceName = if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
+            device.name ?: "Dispositivo Bluetooth"
+        } else {
+            "Dispositivo Bluetooth"
+        }
+
         val deviceNameTextView = TextView(this)
-        deviceNameTextView.text = "Conectando con ${device.name ?: "Dispositivo Bluetooth"}"
+        deviceNameTextView.text = "Conectando con $deviceName"
         deviceNameTextView.textSize = 18f
         deviceNameTextView.setTextColor(resources.getColor(android.R.color.white))
 
         val statusTextView = TextView(this)
-        statusTextView.text = "Estableciendo conexión..."
+        statusTextView.text = "Iniciando conexión..."
         statusTextView.textSize = 14f
         statusTextView.setTextColor(resources.getColor(android.R.color.darker_gray))
+        statusTextView.id = 12345 // Asignar un ID único
 
         val cancelButton = MaterialButton(this)
         cancelButton.text = "Cancelar"
         cancelButton.setOnClickListener {
+            connectionJob?.cancel()
+            bluetoothSocket?.close()
             dialog.dismiss()
             Toast.makeText(this, "Conexión cancelada", Toast.LENGTH_SHORT).show()
         }
@@ -199,21 +438,58 @@ class BluetoothActivity : AppCompatActivity(), BluetoothDeviceAdapter.OnDeviceCl
         dialogLayout.addView(cancelButton)
 
         dialog.setContentView(dialogLayout)
-        dialog.show()
+        return dialog
+    }
 
-        val handler = Handler(Looper.getMainLooper())
-        handler.postDelayed({
-            statusTextView.text = "Estableciendo vínculo..."
-        }, 1500)
+    private fun updateDialogStatus(dialog: Dialog, status: String) {
+        val statusTextView = dialog.findViewById<TextView>(12345)
+        statusTextView?.text = status
+    }
 
-        handler.postDelayed({
-            statusTextView.text = "Configurando dispositivo..."
-        }, 3000)
+    private fun tryCreateSocket(device: BluetoothDevice): BluetoothSocket? {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+            return null
+        }
 
-        handler.postDelayed({
-            dialog.dismiss()
-            Toast.makeText(this, "¡${device.name ?: "Dispositivo"} conectado con éxito!", Toast.LENGTH_SHORT).show()
-        }, 4500)
+        // Intentar con el UUID principal (SPP)
+        return try {
+            device.createRfcommSocketToServiceRecord(SPP_UUID)
+        } catch (e: Exception) {
+            // Si falla, intentar con otros UUIDs
+            for (uuid in COMMON_UUIDS.drop(1)) {
+                try {
+                    return device.createRfcommSocketToServiceRecord(uuid)
+                } catch (ex: Exception) {
+                    continue
+                }
+            }
+            // Como último recurso, usar reflexión
+            try {
+                val method = device.javaClass.getMethod("createRfcommSocket", Int::class.javaPrimitiveType)
+                method.invoke(device, 1) as BluetoothSocket
+            } catch (ex: Exception) {
+                throw e // Lanzar el error original
+            }
+        }
+    }
+
+    private fun handleSuccessfulConnection(device: BluetoothDevice, socket: BluetoothSocket) {
+        // Aquí puedes implementar la lógica específica para tu aplicación
+        // Por ejemplo:
+        // - Guardar la conexión en una lista de dispositivos conectados
+        // - Iniciar un servicio para mantener la comunicación
+        // - Enviar comandos específicos al dispositivo
+
+        // Ejemplo de cómo enviar datos:
+        /*
+        try {
+            val outputStream = socket.outputStream
+            val message = "Hola desde Android!"
+            outputStream.write(message.toByteArray())
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+        */
     }
 
     private val bluetoothReceiver = object : BroadcastReceiver() {
@@ -241,6 +517,19 @@ class BluetoothActivity : AppCompatActivity(), BluetoothDeviceAdapter.OnDeviceCl
                         showDevicesList()
                     }
                 }
+                BluetoothDevice.ACTION_BOND_STATE_CHANGED -> {
+                    val device = intent.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
+                    val bondState = intent.getIntExtra(BluetoothDevice.EXTRA_BOND_STATE, BluetoothDevice.BOND_NONE)
+
+                    when (bondState) {
+                        BluetoothDevice.BOND_BONDED -> {
+                            // Dispositivo emparejado exitosamente
+                        }
+                        BluetoothDevice.BOND_NONE -> {
+                            // Emparejamiento falló
+                        }
+                    }
+                }
             }
         }
     }
@@ -250,7 +539,7 @@ class BluetoothActivity : AppCompatActivity(), BluetoothDeviceAdapter.OnDeviceCl
         if (requestCode == REQUEST_ENABLE_BT) {
             if (resultCode == RESULT_OK) {
                 Toast.makeText(this, "Bluetooth activado correctamente", Toast.LENGTH_SHORT).show()
-                startBluetoothDiscovery()  // empezar búsqueda si se activó Bluetooth
+                startBluetoothDiscovery()
             } else {
                 Toast.makeText(this, "La función Bluetooth es necesaria para esta característica", Toast.LENGTH_LONG).show()
                 emptyMessageText.text = "Bluetooth desactivado. Por favor, actívelo para buscar dispositivos."
@@ -272,6 +561,13 @@ class BluetoothActivity : AppCompatActivity(), BluetoothDeviceAdapter.OnDeviceCl
 
     override fun onDestroy() {
         super.onDestroy()
+
+        // Cancelar trabajos de conexión
+        connectionJob?.cancel()
+
+        // Cerrar socket si está abierto
+        bluetoothSocket?.close()
+
         if (bluetoothAdapter.isDiscovering) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN) == PackageManager.PERMISSION_GRANTED) {
                 bluetoothAdapter.cancelDiscovery()
