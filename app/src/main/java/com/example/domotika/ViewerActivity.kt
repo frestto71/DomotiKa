@@ -40,7 +40,7 @@ class ViewerActivity : AppCompatActivity() {
     private lateinit var btnDisconnect: MaterialButton
     private lateinit var btnDisconnectOverlay: MaterialButton
     private lateinit var btnBack: MaterialButton
-    private lateinit var btnStreams: MaterialButton
+    // ❌ ELIMINADO: btnStreams
 
     // Control de orientación
     private lateinit var fabOrientation: FloatingActionButton
@@ -57,8 +57,7 @@ class ViewerActivity : AppCompatActivity() {
     private lateinit var tvFrameCountOverlay: TextView
     private lateinit var tvConnectionTimeOverlay: TextView
 
-    // Lista de streams
-    private lateinit var streamsLayout: LinearLayout
+    // ❌ ELIMINADO: streamsLayout
 
     // Variables de control
     private var isConnected = false
@@ -165,7 +164,7 @@ class ViewerActivity : AppCompatActivity() {
         btnDisconnect = findViewById(R.id.btnDisconnect)
         btnDisconnectOverlay = findViewById(R.id.btnDisconnectOverlay)
         btnBack = findViewById(R.id.btnBack)
-        btnStreams = findViewById(R.id.btnStreams)
+        // ❌ ELIMINADO: btnStreams = findViewById(R.id.btnStreams)
 
         // Control de orientación
         fabOrientation = findViewById(R.id.fabOrientation)
@@ -182,8 +181,7 @@ class ViewerActivity : AppCompatActivity() {
         tvFrameCountOverlay = findViewById(R.id.tvFrameCountOverlay)
         tvConnectionTimeOverlay = findViewById(R.id.tvConnectionTimeOverlay)
 
-        // Lista de streams
-        streamsLayout = findViewById(R.id.streamsLayout)
+        // ❌ ELIMINADO: streamsLayout = findViewById(R.id.streamsLayout)
 
         // Estado inicial
         showConnectionScreen()
@@ -194,7 +192,7 @@ class ViewerActivity : AppCompatActivity() {
         btnDisconnect.setOnClickListener { disconnectFromStream() }
         btnDisconnectOverlay.setOnClickListener { disconnectFromStream() }
         btnBack.setOnClickListener { finish() }
-        btnStreams.setOnClickListener { toggleStreamsList() }
+        // ❌ ELIMINADO: btnStreams.setOnClickListener { toggleStreamsList() }
 
         // Click en la imagen para mostrar/ocultar controles
         imageStreamView.setOnClickListener { toggleControls() }
@@ -307,7 +305,6 @@ class ViewerActivity : AppCompatActivity() {
         showConnectionScreen()
         updateStatus("📭 Desconectado del stream")
         resetCounters()
-
     }
 
     private fun startFetching() {
@@ -417,7 +414,6 @@ class ViewerActivity : AppCompatActivity() {
         }
     }
 
-
     private fun startTimeUpdater() {
         timeRunnable = object : Runnable {
             override fun run() {
@@ -494,103 +490,10 @@ class ViewerActivity : AppCompatActivity() {
         }
     }
 
-    private fun toggleStreamsList() {
-        if (streamsLayout.visibility == View.VISIBLE) {
-            streamsLayout.visibility = View.GONE
-            Toast.makeText(this, "📋 Lista de streams ocultada", Toast.LENGTH_SHORT).show()
-        } else {
-            loadActiveStreams()
-        }
-    }
-
-    private fun loadActiveStreams() {
-        Thread {
-            try {
-                val url = URL("$streamUrl/list")
-                val connection = url.openConnection() as HttpURLConnection
-                connection.requestMethod = "GET"
-                connection.connectTimeout = 5000
-                connection.readTimeout = 5000
-
-                if (connection.responseCode == 200) {
-                    val response = connection.inputStream.bufferedReader().readText()
-                    val json = JSONObject(response)
-
-                    if (json.getBoolean("success")) {
-                        val streams = json.getJSONArray("streams")
-
-                        runOnUiThread {
-                            populateStreamsList(streams)
-                        }
-                    }
-                } else {
-                    runOnUiThread {
-                        Toast.makeText(this@ViewerActivity, "⚠️ Error del servidor al cargar streams", Toast.LENGTH_SHORT).show()
-                    }
-                }
-
-                connection.disconnect()
-
-            } catch (e: Exception) {
-                Log.e("VIEWER", "Error loading streams: ${e.message}")
-                runOnUiThread {
-                    Toast.makeText(this@ViewerActivity, "💥 Error de red cargando streams", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }.start()
-    }
-
-    private fun populateStreamsList(streams: org.json.JSONArray) {
-        streamsLayout.removeAllViews()
-
-        if (streams.length() == 0) {
-            val noStreamsText = TextView(this)
-            noStreamsText.text = "📭 No hay streams activos en este momento"
-            noStreamsText.setTextColor(ContextCompat.getColor(this, android.R.color.white))
-            noStreamsText.textSize = 16f
-            noStreamsText.setPadding(20, 20, 20, 20)
-            noStreamsText.gravity = android.view.Gravity.CENTER
-            streamsLayout.addView(noStreamsText)
-        } else {
-            for (i in 0 until streams.length()) {
-                val stream = streams.getJSONObject(i)
-                val token = stream.getString("token")
-                val streamName = stream.optString("stream_name", "Stream Anónimo")
-                val deviceId = stream.optString("device_id", "Dispositivo desconocido")
-                val viewerCount = stream.optInt("viewer_count", 0)
-
-                // 🆕 BOTÓN ELEGANTE PARA STREAM
-                val streamButton = MaterialButton(this)
-                streamButton.text = "$streamName\n🔑 $token\n👁 $viewerCount espectadores"
-                streamButton.setTextColor(ContextCompat.getColor(this, android.R.color.white))
-                streamButton.backgroundTintList = ContextCompat.getColorStateList(this, android.R.color.transparent)
-                streamButton.strokeColor = ContextCompat.getColorStateList(this, android.R.color.holo_blue_light)
-                streamButton.strokeWidth = 2
-                streamButton.cornerRadius = 16
-                streamButton.setPadding(16, 16, 16, 16)
-
-                streamButton.setOnClickListener {
-                    etToken.setText(token)
-                    streamsLayout.visibility = View.GONE
-                    Toast.makeText(this, "✨ Stream seleccionado: $streamName", Toast.LENGTH_SHORT).show()
-                    connectToStream()
-                }
-
-                val layoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-                )
-                layoutParams.setMargins(0, 0, 0, 12)
-                streamButton.layoutParams = layoutParams
-
-                streamsLayout.addView(streamButton)
-            }
-
-            Toast.makeText(this, "📡 ${streams.length()} streams encontrados", Toast.LENGTH_SHORT).show()
-        }
-
-        streamsLayout.visibility = View.VISIBLE
-    }
+    // ❌ ELIMINADOS TODOS LOS MÉTODOS RELACIONADOS CON STREAMS:
+    // - toggleStreamsList()
+    // - loadActiveStreams()
+    // - populateStreamsList()
 
     override fun onDestroy() {
         super.onDestroy()

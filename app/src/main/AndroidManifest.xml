@@ -187,17 +187,6 @@
         </service>
 
         <!-- 📱 RECEPTOR PARA EVENTOS DE PANTALLA Y SISTEMA -->
-        <receiver
-            android:name=".ScreenStateReceiver"
-            android:enabled="true"
-            android:exported="false">
-            <intent-filter android:priority="1000">
-                <action android:name="android.intent.action.SCREEN_OFF" />
-                <action android:name="android.intent.action.SCREEN_ON" />
-                <action android:name="android.intent.action.USER_PRESENT" />
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
 
         <!-- 🔋 RECEPTOR PARA OPTIMIZACIÓN DE BATERÍA -->
         <receiver
