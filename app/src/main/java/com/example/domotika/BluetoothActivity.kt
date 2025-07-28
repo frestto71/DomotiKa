@@ -202,6 +202,7 @@ class BluetoothActivity : AppCompatActivity(), BluetoothDeviceAdapter.OnDeviceCl
 
         when (deviceType) {
             DeviceType.AUDIO_DEVICE -> handleAudioDevice(device)
+            DeviceType.LAPTOP_DEVICE -> connectToLaptopDirectly(device)
             DeviceType.DATA_DEVICE -> connectToDevice(device)
             DeviceType.UNKNOWN -> showDeviceTypeDialog(device)
         }
@@ -210,6 +211,7 @@ class BluetoothActivity : AppCompatActivity(), BluetoothDeviceAdapter.OnDeviceCl
     private enum class DeviceType {
         AUDIO_DEVICE,
         DATA_DEVICE,
+        LAPTOP_DEVICE,
         UNKNOWN
     }
 
@@ -220,10 +222,21 @@ class BluetoothActivity : AppCompatActivity(), BluetoothDeviceAdapter.OnDeviceCl
 
         // Verificar por nombre del dispositivo
         val deviceName = device.name?.lowercase() ?: ""
+
+        // Palabras clave para dispositivos de audio
         val audioKeywords = listOf("headphone", "headset", "earbuds", "speaker", "audio", "beats", "airpods", "sony", "bose", "jbl")
 
-        if (audioKeywords.any { deviceName.contains(it) }) {
-            return DeviceType.AUDIO_DEVICE
+        // Palabras clave para laptops/computadoras - AMPLIADA
+        val laptopKeywords = listOf(
+            "laptop", "notebook", "computer", "pc", "desktop",
+            "macbook", "thinkpad", "dell", "hp", "lenovo",
+            "asus", "acer", "surface", "windows", "mac",
+            "gaming", "workstation", "tower", "mini-pc"
+        )
+
+        when {
+            audioKeywords.any { deviceName.contains(it) } -> return DeviceType.AUDIO_DEVICE
+            laptopKeywords.any { deviceName.contains(it) } -> return DeviceType.LAPTOP_DEVICE
         }
 
         // Verificar por clase de dispositivo
@@ -234,19 +247,154 @@ class BluetoothActivity : AppCompatActivity(), BluetoothDeviceAdapter.OnDeviceCl
                 android.bluetooth.BluetoothClass.Device.Major.AUDIO_VIDEO -> {
                     return DeviceType.AUDIO_DEVICE
                 }
-                android.bluetooth.BluetoothClass.Device.Major.COMPUTER,
+                android.bluetooth.BluetoothClass.Device.Major.COMPUTER -> {
+                    return DeviceType.LAPTOP_DEVICE
+                }
                 android.bluetooth.BluetoothClass.Device.Major.PERIPHERAL,
                 android.bluetooth.BluetoothClass.Device.Major.PHONE -> {
                     return DeviceType.DATA_DEVICE
                 }
                 else -> {
-                    // Para otros tipos de dispositivos no reconocidos
                     return DeviceType.UNKNOWN
                 }
             }
         }
 
         return DeviceType.UNKNOWN
+    }
+
+    private fun connectToLaptopDirectly(device: BluetoothDevice) {
+        val deviceName = if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
+            device.name ?: "Laptop"
+        } else {
+            "Laptop"
+        }
+
+        AlertDialog.Builder(this)
+            .setTitle("💻 Laptop Detectada")
+            .setMessage("$deviceName parece ser una laptop.\n\n¿Quieres conectarte como mouse virtual?\n\n" +
+                    "✅ Se abrirá una pantalla de touchpad\n" +
+                    "✅ Controla el cursor con tu dedo\n" +
+                    "✅ Click izquierdo/derecho y scroll\n" +
+                    "✅ Funciona en tiempo real")
+            .setPositiveButton("🖱️ Sí, usar como Mouse") { _, _ ->
+                connectToDeviceAsLaptop(device)
+            }
+            .setNegativeButton("📱 Conexión Normal") { _, _ ->
+                connectToDevice(device)
+            }
+            .setNeutralButton("Cancelar", null)
+            .show()
+    }
+
+    private fun connectToDeviceAsLaptop(device: BluetoothDevice) {
+        val dialog = createConnectionDialog(device)
+        dialog.show()
+
+        connectionJob = CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val deviceName = if (ActivityCompat.checkSelfPermission(this@BluetoothActivity, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
+                    device.name ?: "Laptop"
+                } else {
+                    "Laptop"
+                }
+
+                withContext(Dispatchers.Main) {
+                    updateDialogStatus(dialog, "Verificando laptop...")
+                }
+
+                // Verificar emparejamiento
+                val bondState = device.bondState
+                if (bondState != BluetoothDevice.BOND_BONDED) {
+                    withContext(Dispatchers.Main) {
+                        updateDialogStatus(dialog, "Emparejando con laptop...")
+                    }
+
+                    if (ActivityCompat.checkSelfPermission(this@BluetoothActivity, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
+                        device.createBond()
+                    }
+                    delay(3000)
+                }
+
+                withContext(Dispatchers.Main) {
+                    updateDialogStatus(dialog, "Conectando como mouse virtual...")
+                }
+
+                // Crear socket
+                bluetoothSocket = if (ActivityCompat.checkSelfPermission(this@BluetoothActivity, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
+                    tryCreateSocket(device)
+                } else {
+                    throw SecurityException("Sin permisos de Bluetooth")
+                }
+
+                bluetoothSocket?.let { socket ->
+                    try {
+                        socket.connect()
+
+                        withContext(Dispatchers.Main) {
+                            updateDialogStatus(dialog, "Configurando touchpad virtual...")
+                        }
+
+                        delay(1000)
+
+                        // Abrir touchpad
+                        withContext(Dispatchers.Main) {
+                            dialog.dismiss()
+                            openTouchpadActivity(device, socket)
+                        }
+
+                    } catch (e: IOException) {
+                        // Método alternativo
+                        withContext(Dispatchers.Main) {
+                            updateDialogStatus(dialog, "Intentando conexión alternativa...")
+                        }
+
+                        try {
+                            socket.close()
+                            val method = device.javaClass.getMethod("createRfcommSocket", Int::class.javaPrimitiveType)
+                            bluetoothSocket = method.invoke(device, 1) as BluetoothSocket
+                            bluetoothSocket?.connect()
+
+                            withContext(Dispatchers.Main) {
+                                dialog.dismiss()
+                                openTouchpadActivity(device, bluetoothSocket!!)
+                            }
+
+                        } catch (e2: Exception) {
+                            withContext(Dispatchers.Main) {
+                                dialog.dismiss()
+                                Toast.makeText(this@BluetoothActivity, "Error al conectar: ${e2.message}", Toast.LENGTH_LONG).show()
+                            }
+                        }
+                    }
+                }
+
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    dialog.dismiss()
+                    Toast.makeText(this@BluetoothActivity, "Error de conexión: ${e.message}", Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+    }
+
+    private fun openTouchpadActivity(device: BluetoothDevice, socket: BluetoothSocket) {
+        val deviceName = if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
+            device.name ?: "Laptop"
+        } else {
+            "Laptop"
+        }
+
+        Toast.makeText(this, "¡Mouse virtual activado para $deviceName!", Toast.LENGTH_LONG).show()
+
+        // Pasar socket al manager
+        BluetoothSocketManager.setSocket(socket)
+
+        val intent = Intent(this, TouchpadActivity::class.java).apply {
+            putExtra(TouchpadActivity.EXTRA_DEVICE_NAME, deviceName)
+        }
+
+        startActivity(intent)
     }
 
     private fun handleAudioDevice(device: BluetoothDevice) {
@@ -257,7 +405,7 @@ class BluetoothActivity : AppCompatActivity(), BluetoothDeviceAdapter.OnDeviceCl
         }
 
         AlertDialog.Builder(this)
-            .setTitle("Dispositivo de Audio Detectado")
+            .setTitle("🎵 Dispositivo de Audio Detectado")
             .setMessage("$deviceName parece ser un dispositivo de audio (audífonos/altavoz).\n\n" +
                     "Para conectar dispositivos de audio, ve a:\n" +
                     "Configuración → Bluetooth → Buscar dispositivos\n\n" +
@@ -285,18 +433,21 @@ class BluetoothActivity : AppCompatActivity(), BluetoothDeviceAdapter.OnDeviceCl
         }
 
         AlertDialog.Builder(this)
-            .setTitle("Tipo de Dispositivo")
+            .setTitle("❓ Tipo de Dispositivo")
             .setMessage("¿Qué tipo de dispositivo es $deviceName?")
-            .setPositiveButton("Dispositivo de Audio") { _, _ ->
+            .setPositiveButton("🎵 Dispositivo de Audio") { _, _ ->
                 handleAudioDevice(device)
             }
-            .setNegativeButton("Dispositivo de Datos") { _, _ ->
+            .setNegativeButton("💻 Laptop/Computadora") { _, _ ->
+                connectToLaptopDirectly(device)
+            }
+            .setNeutralButton("📱 Dispositivo de Datos") { _, _ ->
                 connectToDevice(device)
             }
-            .setNeutralButton("Cancelar", null)
             .show()
     }
 
+    // Resto de métodos igual que antes...
     private fun connectToDevice(device: BluetoothDevice) {
         val dialog = createConnectionDialog(device)
         dialog.show()
@@ -309,12 +460,10 @@ class BluetoothActivity : AppCompatActivity(), BluetoothDeviceAdapter.OnDeviceCl
                     "Dispositivo Bluetooth"
                 }
 
-                // Actualizar UI: Verificando estado del dispositivo
                 withContext(Dispatchers.Main) {
                     updateDialogStatus(dialog, "Verificando dispositivo...")
                 }
 
-                // Verificar si el dispositivo está emparejado
                 val bondState = device.bondState
                 if (bondState != BluetoothDevice.BOND_BONDED) {
                     withContext(Dispatchers.Main) {
@@ -324,24 +473,19 @@ class BluetoothActivity : AppCompatActivity(), BluetoothDeviceAdapter.OnDeviceCl
                     if (ActivityCompat.checkSelfPermission(this@BluetoothActivity, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
                         device.createBond()
                     }
-
-                    // Esperar a que se complete el emparejamiento
                     delay(3000)
                 }
 
-                // Actualizar UI: Estableciendo conexión
                 withContext(Dispatchers.Main) {
                     updateDialogStatus(dialog, "Estableciendo conexión...")
                 }
 
-                // Crear socket Bluetooth - intentar múltiples UUIDs
                 bluetoothSocket = if (ActivityCompat.checkSelfPermission(this@BluetoothActivity, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
                     tryCreateSocket(device)
                 } else {
                     throw SecurityException("Sin permisos de Bluetooth")
                 }
 
-                // Intentar conectar
                 bluetoothSocket?.let { socket ->
                     try {
                         socket.connect()
@@ -352,25 +496,19 @@ class BluetoothActivity : AppCompatActivity(), BluetoothDeviceAdapter.OnDeviceCl
 
                         delay(1000)
 
-                        // Conexión exitosa
                         withContext(Dispatchers.Main) {
                             dialog.dismiss()
                             Toast.makeText(this@BluetoothActivity, "¡$deviceName conectado con éxito!", Toast.LENGTH_LONG).show()
-
-                            // Aquí puedes agregar lógica adicional para manejar la conexión
                             handleSuccessfulConnection(device, socket)
                         }
 
                     } catch (e: IOException) {
-                        // Intentar método alternativo de conexión
                         withContext(Dispatchers.Main) {
                             updateDialogStatus(dialog, "Intentando método alternativo...")
                         }
 
                         try {
                             socket.close()
-
-                            // Método alternativo usando reflexión
                             val method = device.javaClass.getMethod("createRfcommSocket", Int::class.javaPrimitiveType)
                             bluetoothSocket = method.invoke(device, 1) as BluetoothSocket
                             bluetoothSocket?.connect()
@@ -419,7 +557,7 @@ class BluetoothActivity : AppCompatActivity(), BluetoothDeviceAdapter.OnDeviceCl
         statusTextView.text = "Iniciando conexión..."
         statusTextView.textSize = 14f
         statusTextView.setTextColor(resources.getColor(android.R.color.darker_gray))
-        statusTextView.id = 12345 // Asignar un ID único
+        statusTextView.id = 12345
 
         val cancelButton = MaterialButton(this)
         cancelButton.text = "Cancelar"
@@ -451,11 +589,9 @@ class BluetoothActivity : AppCompatActivity(), BluetoothDeviceAdapter.OnDeviceCl
             return null
         }
 
-        // Intentar con el UUID principal (SPP)
         return try {
             device.createRfcommSocketToServiceRecord(SPP_UUID)
         } catch (e: Exception) {
-            // Si falla, intentar con otros UUIDs
             for (uuid in COMMON_UUIDS.drop(1)) {
                 try {
                     return device.createRfcommSocketToServiceRecord(uuid)
@@ -463,33 +599,17 @@ class BluetoothActivity : AppCompatActivity(), BluetoothDeviceAdapter.OnDeviceCl
                     continue
                 }
             }
-            // Como último recurso, usar reflexión
             try {
                 val method = device.javaClass.getMethod("createRfcommSocket", Int::class.javaPrimitiveType)
                 method.invoke(device, 1) as BluetoothSocket
             } catch (ex: Exception) {
-                throw e // Lanzar el error original
+                throw e
             }
         }
     }
 
     private fun handleSuccessfulConnection(device: BluetoothDevice, socket: BluetoothSocket) {
-        // Aquí puedes implementar la lógica específica para tu aplicación
-        // Por ejemplo:
-        // - Guardar la conexión en una lista de dispositivos conectados
-        // - Iniciar un servicio para mantener la comunicación
-        // - Enviar comandos específicos al dispositivo
-
-        // Ejemplo de cómo enviar datos:
-        /*
-        try {
-            val outputStream = socket.outputStream
-            val message = "Hola desde Android!"
-            outputStream.write(message.toByteArray())
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-        */
+        // Lógica adicional para dispositivos normales
     }
 
     private val bluetoothReceiver = object : BroadcastReceiver() {
@@ -562,10 +682,7 @@ class BluetoothActivity : AppCompatActivity(), BluetoothDeviceAdapter.OnDeviceCl
     override fun onDestroy() {
         super.onDestroy()
 
-        // Cancelar trabajos de conexión
         connectionJob?.cancel()
-
-        // Cerrar socket si está abierto
         bluetoothSocket?.close()
 
         if (bluetoothAdapter.isDiscovering) {

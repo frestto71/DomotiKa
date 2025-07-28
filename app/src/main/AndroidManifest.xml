@@ -162,6 +162,11 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".TouchpadActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+
         <!-- 🎴 SERVICIO HCE PARA EMULACIÓN DE TARJETAS -->
         <service
             android:name=".hce.CardEmulationService"
