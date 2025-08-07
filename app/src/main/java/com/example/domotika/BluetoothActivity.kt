@@ -685,7 +685,7 @@ class BluetoothActivity : AppCompatActivity(), BluetoothDeviceAdapter.OnDeviceCl
             if (allGranted) {
                 startBluetoothDiscovery()
             } else {
-                Toast.makeText(this, "Los permisos son necesarios para utilizar esta característica.", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Los permisos son necesarios para utilizar esta característica", Toast.LENGTH_LONG).show()
             }
         }
     }
