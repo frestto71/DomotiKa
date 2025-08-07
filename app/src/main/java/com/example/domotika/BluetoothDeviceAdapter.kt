@@ -45,15 +45,15 @@ class BluetoothDeviceAdapter(
         private val btnConnect: MaterialButton = itemView.findViewById(R.id.btn_connect)
 
         fun bind(device: BluetoothDevice, listener: OnDeviceClickListener) {
-            // Verificar permisos antes de acceder al nombre del dispositivo
+            // Como ahora solo llegan dispositivos con nombres válidos, simplificamos la lógica
             val hasBluetoothPermission = ActivityCompat.checkSelfPermission(
                 itemView.context,
                 Manifest.permission.BLUETOOTH_CONNECT
             ) == PackageManager.PERMISSION_GRANTED
 
             if (hasBluetoothPermission) {
-                val name = device.name
-                deviceName.text = if (!name.isNullOrEmpty()) name else "Dispositivo Desconocido"
+                // Ya sabemos que el dispositivo tiene nombre válido por el filtro anterior
+                deviceName.text = device.name
             } else {
                 deviceName.text = "Dispositivo Bluetooth"
             }
@@ -94,7 +94,7 @@ class BluetoothDeviceAdapter(
                     itemView.context,
                     Manifest.permission.BLUETOOTH_CONNECT
                 ) != PackageManager.PERMISSION_GRANTED) {
-                return "Desconocido"
+                return "Datos"
             }
 
             // Verificar por nombre del dispositivo

@@ -96,6 +96,16 @@ class BluetoothActivity : AppCompatActivity(), BluetoothDeviceAdapter.OnDeviceCl
         checkPermissionsAndStartDiscovery()
     }
 
+    // Función para verificar si un dispositivo tiene un nombre válido
+    private fun hasValidDeviceName(device: BluetoothDevice): Boolean {
+        return if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
+            val deviceName = device.name
+            !deviceName.isNullOrEmpty() && deviceName.trim().isNotEmpty()
+        } else {
+            false
+        }
+    }
+
     private fun checkPermissionsAndStartDiscovery() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED ||
@@ -621,14 +631,15 @@ class BluetoothActivity : AppCompatActivity(), BluetoothDeviceAdapter.OnDeviceCl
                 BluetoothAdapter.ACTION_DISCOVERY_FINISHED -> {
                     if (discoveredDevices.isEmpty()) {
                         showEmptyView()
-                        emptyMessageText.text = "No se encontraron dispositivos Bluetooth."
+                        emptyMessageText.text = "No se encontraron dispositivos Bluetooth con nombre."
                     } else {
                         showDevicesList()
                     }
                 }
                 BluetoothDevice.ACTION_FOUND -> {
                     val device: BluetoothDevice? = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
-                    if (device != null && !discoveredDevices.contains(device)) {
+                    // FILTRO AGREGADO: Solo agregar dispositivos con nombres válidos
+                    if (device != null && !discoveredDevices.contains(device) && hasValidDeviceName(device)) {
                         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
                             return
                         }
