@@ -2,71 +2,38 @@ package com.example.domotika
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.ListView
-import android.widget.SearchView
-import androidx.appcompat.app.AlertDialog
+import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 
 class InfraredActivity : AppCompatActivity() {
-    private val dispositivosInfrared = arrayOf(
-        "📺 Televisor",
-        "📻 Radio",
-        "🎥 Proyector",  // agregado
-        "❄️ Aire acondicionado",
-        "🔈 Equipo de sonido",
-        "💡 Lámpara con control remoto",
-        "🧴 Ventilador",
-        "🎮 Consola de videojuegos"
-    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_infrared)
+        setContentView(R.layout.ir_menu)
 
-        val addInfraredButton = findViewById<Button>(R.id.btn_add_infrared)
-        addInfraredButton.setOnClickListener {
-            mostrarDialogoDispositivos()
-        }
-    }
+        // Configurar los botones de los dispositivos
+        val btnTelevisores = findViewById<LinearLayout>(R.id.btn_televisores)
+        val btnProyectores = findViewById<LinearLayout>(R.id.btn_proyectores)
+        val btnAires = findViewById<LinearLayout>(R.id.btn_aires)
 
-    private fun mostrarDialogoDispositivos() {
-        val dialogView = layoutInflater.inflate(R.layout.dialog_buscar_producto, null)
-        val searchView = dialogView.findViewById<SearchView>(R.id.searchView)
-        val listView = dialogView.findViewById<ListView>(R.id.listView)
-
-        val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, dispositivosInfrared.toMutableList())
-        listView.adapter = adapter
-
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?) = false
-            override fun onQueryTextChange(newText: String?): Boolean {
-                adapter.filter.filter(newText)
-                return true
-            }
-        })
-
-        val dialog = AlertDialog.Builder(this)
-            .setTitle("Selecciona un dispositivo Infrarrojo")
-            .setView(dialogView)
-            .setNegativeButton("Cancelar", null)
-            .create()
-
-        listView.setOnItemClickListener { _, _, position, _ ->
-            val seleccionado = adapter.getItem(position)
-            dialog.dismiss()
-            if (seleccionado != null) {
-                abrirControlDispositivo(seleccionado)
-            }
+        // Click listener para televisores - abre selección de dispositivos
+        btnTelevisores.setOnClickListener {
+            val intent = Intent(this, DeviceSelectionActivity::class.java)
+            intent.putExtra("device_type", "tv")
+            startActivity(intent)
         }
 
-        dialog.show()
-    }
+        // Click listener para proyectores - abre selección de dispositivos
+        btnProyectores.setOnClickListener {
+            val intent = Intent(this, DeviceSelectionActivity::class.java)
+            intent.putExtra("device_type", "projector")
+            startActivity(intent)
+        }
 
-    private fun abrirControlDispositivo(nombreDispositivo: String) {
-        val intent = Intent(this, InfraredControlActivity::class.java)
-        intent.putExtra("dispositivo_nombre", nombreDispositivo)
-        startActivity(intent)
+        // Aires acondicionados - funcionalidad futura
+        btnAires.setOnClickListener {
+            Toast.makeText(this, "Función de aires acondicionados próximamente", Toast.LENGTH_SHORT).show()
+        }
     }
 }

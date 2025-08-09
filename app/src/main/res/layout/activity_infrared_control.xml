@@ -1,40 +1,465 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:background="#1e1e1e"
-    android:padding="24dp"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/remote_background"
+    android:padding="20dp"
+    android:gravity="center_horizontal">
 
+    <!-- ========== HEADER CON MARCA ========== -->
     <TextView
-        android:id="@+id/tv_dispositivo_nombre"
+        android:id="@+id/tv_marca"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Dispositivo"
-        android:textColor="#00FFE0"
-        android:textSize="24sp"
+        android:text="TV-MARCA"
+        android:textColor="@color/white"
+        android:textSize="16sp"
         android:textStyle="bold"
-        android:layout_gravity="center"
-        android:paddingBottom="24dp" />
+        android:background="@drawable/header_background"
+        android:padding="12dp"
+        android:layout_marginBottom="24dp"
+        android:letterSpacing="0.1" />
 
-    <Button
-        android:id="@+id/btn_encender"
+    <!-- ========== BOTONES PRINCIPALES ========== -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Encender"
-        android:backgroundTint="#00FFE0"
-        android:textColor="#000000"
-        android:textStyle="bold"
-        android:padding="16dp"
-        android:layout_marginBottom="12dp" />
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginBottom="16dp">
 
-    <Button
-        android:id="@+id/btn_apagar"
+        <ImageButton
+            android:id="@+id/btn_power"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_margin="8dp"
+            android:background="@drawable/circular_button_red"
+            android:contentDescription="Power"
+            android:src="@drawable/ic_power"
+            android:scaleType="fitCenter"
+            android:padding="14dp" />
+
+        <ImageButton
+            android:id="@+id/btn_info"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="8dp"
+            android:background="@drawable/circular_button_gray"
+            android:contentDescription="Info"
+            android:src="@drawable/ic_info"
+            android:scaleType="fitCenter"
+            android:padding="12dp" />
+
+        <ImageButton
+            android:id="@+id/btn_menu"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="8dp"
+            android:background="@drawable/circular_button_gray"
+            android:contentDescription="Menu"
+            android:src="@drawable/ic_menu"
+            android:scaleType="fitCenter"
+            android:padding="12dp" />
+
+        <ImageButton
+            android:id="@+id/btn_exit"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="8dp"
+            android:background="@drawable/circular_button_gray"
+            android:contentDescription="Exit"
+            android:src="@drawable/ic_exit"
+            android:scaleType="fitCenter"
+            android:padding="12dp" />
+
+    </LinearLayout>
+
+    <!-- ========== BOTONES DE NAVEGACIÓN ========== -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Apagar"
-        android:backgroundTint="#ff4444"
-        android:textColor="#FFFFFF"
-        android:textStyle="bold"
-        android:padding="16dp" />
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginBottom="28dp">
+
+        <ImageButton
+            android:id="@+id/btn_home"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/circular_button_gray"
+            android:src="@drawable/ic_home"
+            android:contentDescription="Home"
+            android:scaleType="fitCenter"
+            android:padding="12dp" />
+
+        <ImageButton
+            android:id="@+id/btn_back"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/circular_button_gray"
+            android:src="@drawable/ic_back"
+            android:contentDescription="Back"
+            android:scaleType="fitCenter"
+            android:padding="12dp" />
+
+        <ImageButton
+            android:id="@+id/btn_mute"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/circular_button_gray"
+            android:src="@drawable/ic_mute"
+            android:contentDescription="Mute"
+            android:scaleType="fitCenter"
+            android:padding="12dp" />
+
+        <ImageButton
+            android:id="@+id/btn_input"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/circular_button_gray"
+            android:src="@drawable/ic_input"
+            android:contentDescription="Input"
+            android:scaleType="fitCenter"
+            android:padding="12dp" />
+
+    </LinearLayout>
+
+    <!-- ========== SECCIÓN DE CONTROLES PRINCIPALES ========== -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginBottom="32dp">
+
+        <!-- Control de Volumen -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_marginEnd="24dp">
+
+            <Button
+                android:id="@+id/btn_vol_plus"
+                android:layout_width="44dp"
+                android:layout_height="75dp"
+                android:text="+"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:background="@drawable/rectangular_button_light"
+                android:layout_marginBottom="4dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="VOL"
+                android:textColor="@color/white"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:layout_marginVertical="12dp"
+                android:letterSpacing="0.1" />
+
+            <Button
+                android:id="@+id/btn_vol_minus"
+                android:layout_width="44dp"
+                android:layout_height="75dp"
+                android:text="−"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:background="@drawable/rectangular_button_light"
+                android:layout_marginTop="4dp" />
+
+        </LinearLayout>
+
+        <!-- Controles Direccionales y OK -->
+        <RelativeLayout
+            android:layout_width="140dp"
+            android:layout_height="120dp"
+            android:layout_marginHorizontal="12dp">
+
+            <!-- Botón Arriba -->
+            <ImageButton
+                android:id="@+id/btn_up"
+                android:layout_width="42dp"
+                android:layout_height="32dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/rectangular_button_light"
+                android:contentDescription="Up"
+                android:src="@drawable/ic_arrow_up"
+                android:scaleType="fitCenter"
+                android:padding="8dp" />
+
+            <!-- Botón Izquierda -->
+            <ImageButton
+                android:id="@+id/btn_left"
+                android:layout_width="42dp"
+                android:layout_height="32dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/rectangular_button_light"
+                android:contentDescription="Left"
+                android:src="@drawable/ic_arrow_left"
+                android:scaleType="fitCenter"
+                android:padding="8dp" />
+
+            <!-- Botón OK (Centro) -->
+            <Button
+                android:id="@+id/btn_ok"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                android:layout_centerInParent="true"
+                android:background="@drawable/circular_button_light"
+                android:contentDescription="OK"
+                android:text="OK"
+                android:textColor="@color/black"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <!-- Botón Derecha -->
+            <ImageButton
+                android:id="@+id/btn_right"
+                android:layout_width="42dp"
+                android:layout_height="32dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/rectangular_button_light"
+                android:contentDescription="Right"
+                android:src="@drawable/ic_arrow_right"
+                android:scaleType="fitCenter"
+                android:padding="8dp" />
+
+            <!-- Botón Abajo -->
+            <ImageButton
+                android:id="@+id/btn_down"
+                android:layout_width="42dp"
+                android:layout_height="32dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/rectangular_button_light"
+                android:contentDescription="Down"
+                android:src="@drawable/ic_arrow_down"
+                android:scaleType="fitCenter"
+                android:padding="8dp" />
+
+        </RelativeLayout>
+
+        <!-- Control de Canales -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_marginStart="24dp">
+
+            <Button
+                android:id="@+id/btn_ch_plus"
+                android:layout_width="44dp"
+                android:layout_height="75dp"
+                android:text="△"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:background="@drawable/rectangular_button_light"
+                android:layout_marginBottom="4dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="CH"
+                android:textColor="@color/white"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:layout_marginVertical="12dp"
+                android:letterSpacing="0.1" />
+
+            <Button
+                android:id="@+id/btn_ch_minus"
+                android:layout_width="44dp"
+                android:layout_height="75dp"
+                android:text="▽"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:background="@drawable/rectangular_button_light"
+                android:layout_marginTop="4dp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- ========== TECLADO NUMÉRICO ========== -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <!-- Primera fila: 1, 2, 3 -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp">
+
+            <Button
+                android:id="@+id/btn_1"
+                android:layout_width="54dp"
+                android:layout_height="54dp"
+                android:layout_margin="6dp"
+                android:text="1"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:background="@drawable/circular_button_light" />
+
+            <Button
+                android:id="@+id/btn_2"
+                android:layout_width="54dp"
+                android:layout_height="54dp"
+                android:layout_margin="6dp"
+                android:text="2"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:background="@drawable/circular_button_light" />
+
+            <Button
+                android:id="@+id/btn_3"
+                android:layout_width="54dp"
+                android:layout_height="54dp"
+                android:layout_margin="6dp"
+                android:text="3"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:background="@drawable/circular_button_light" />
+
+        </LinearLayout>
+
+        <!-- Segunda fila: 4, 5, 6 -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp">
+
+            <Button
+                android:id="@+id/btn_4"
+                android:layout_width="54dp"
+                android:layout_height="54dp"
+                android:layout_margin="6dp"
+                android:text="4"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:background="@drawable/circular_button_light" />
+
+            <Button
+                android:id="@+id/btn_5"
+                android:layout_width="54dp"
+                android:layout_height="54dp"
+                android:layout_margin="6dp"
+                android:text="5"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:background="@drawable/circular_button_light" />
+
+            <Button
+                android:id="@+id/btn_6"
+                android:layout_width="54dp"
+                android:layout_height="54dp"
+                android:layout_margin="6dp"
+                android:text="6"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:background="@drawable/circular_button_light" />
+
+        </LinearLayout>
+
+        <!-- Tercera fila: 7, 8, 9 -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp">
+
+            <Button
+                android:id="@+id/btn_7"
+                android:layout_width="54dp"
+                android:layout_height="54dp"
+                android:layout_margin="6dp"
+                android:text="7"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:background="@drawable/circular_button_light" />
+
+            <Button
+                android:id="@+id/btn_8"
+                android:layout_width="54dp"
+                android:layout_height="54dp"
+                android:layout_margin="6dp"
+                android:text="8"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:background="@drawable/circular_button_light" />
+
+            <Button
+                android:id="@+id/btn_9"
+                android:layout_width="54dp"
+                android:layout_height="54dp"
+                android:layout_margin="6dp"
+                android:text="9"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:background="@drawable/circular_button_light" />
+
+        </LinearLayout>
+
+        <!-- Cuarta fila: 0 y botón especial -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/btn_0"
+                android:layout_width="54dp"
+                android:layout_height="54dp"
+                android:layout_margin="6dp"
+                android:text="0"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:background="@drawable/circular_button_light" />
+
+            <Button
+                android:id="@+id/btn_dash"
+                android:layout_width="54dp"
+                android:layout_height="54dp"
+                android:layout_margin="6dp"
+                android:background="@drawable/circular_button_light"
+                android:text="−"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 </LinearLayout>

@@ -3,4 +3,5 @@
     <string name="hola_mundo_desde_android_studio">Hola Mundo desde Android Studio!</string>
     <string name="open_drawer">Abrir menú lateral</string>
     <string name="close_drawer">Cerrar menú lateral</string>
+    <string name="control_por_infrarrojo">Control por Infrarrojo</string>
 </resources>
