@@ -182,6 +182,8 @@ class DeviceSelectionActivity : AppCompatActivity() {
                 put("left", device.buttons.left)
                 put("right", device.buttons.right)
                 put("ok", device.buttons.ok)
+                put("channel_up", device.buttons.channel_up)
+                put("channel_down", device.buttons.channel_down)
             })
         }
         return json.toString()

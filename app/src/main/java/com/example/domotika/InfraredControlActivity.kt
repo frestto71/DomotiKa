@@ -189,6 +189,8 @@ class InfraredControlActivity : AppCompatActivity() {
                         "mute" -> buttons.mute
                         "vol_up" -> buttons.vol_up
                         "vol_down" -> buttons.vol_down
+                        "ch_up" -> buttons.channel_up
+                        "ch_down" -> buttons.channel_down
                         "menu" -> buttons.menu
                         "source" -> buttons.source
                         "exit" -> buttons.exit
@@ -285,27 +287,29 @@ class InfraredControlActivity : AppCompatActivity() {
         val buttonsObj = jsonObj.getJSONObject("buttons")
 
         val buttons = TvButtons(
-            power = buttonsObj.getString("power"),
-            mute = buttonsObj.getString("mute"),
-            vol_up = buttonsObj.getString("vol_up"),
-            vol_down = buttonsObj.getString("vol_down"),
-            menu = buttonsObj.getString("menu"),
-            source = buttonsObj.getString("source"),
+            power = buttonsObj.optString("power", ""),
+            mute = buttonsObj.optString("mute", ""),
+            vol_up = buttonsObj.optString("vol_up", ""),
+            vol_down = buttonsObj.optString("vol_down", ""),
+            menu = buttonsObj.optString("menu", ""),
+            source = buttonsObj.optString("source", ""),
             aspect = buttonsObj.optString("aspect", ""),
             color_mode = buttonsObj.optString("color_mode", ""),
-            exit = buttonsObj.getString("exit"),
-            up = buttonsObj.getString("up"),
-            down = buttonsObj.getString("down"),
-            left = buttonsObj.getString("left"),
-            right = buttonsObj.getString("right"),
-            ok = buttonsObj.getString("ok")
+            exit = buttonsObj.optString("exit", ""),
+            up = buttonsObj.optString("up", ""),
+            down = buttonsObj.optString("down", ""),
+            left = buttonsObj.optString("left", ""),
+            right = buttonsObj.optString("right", ""),
+            ok = buttonsObj.optString("ok", ""),
+            channel_up = buttonsObj.optString("channel_up", ""),
+            channel_down = buttonsObj.optString("channel_down", "")
         )
 
         return TvDevice(
-            id = jsonObj.getString("id"),
-            brand = jsonObj.getString("brand"),
-            model = jsonObj.getString("model"),
-            protocol = jsonObj.getString("protocol"),
+            id = jsonObj.optString("id", ""),
+            brand = jsonObj.optString("brand", ""),
+            model = jsonObj.optString("model", ""),
+            protocol = jsonObj.optString("protocol", "NEC"),
             buttons = buttons
         )
     }

@@ -34,7 +34,9 @@ data class TvButtons(
     val down: String,
     val left: String,
     val right: String,
-    val ok: String
+    val ok: String,
+    val channel_up: String,
+    val channel_down: String
 )
 
 // Para Proyectores (mayúsculas)
@@ -188,40 +190,57 @@ class IrCodeService {
         private fun parseTvDevices(jsonString: String): List<TvDevice> {
             val devices = mutableListOf<TvDevice>()
             try {
+                Log.d("IrCodeService", "Parseando TV devices...")
                 val jsonArray = JSONArray(jsonString)
+                Log.d("IrCodeService", "JSON Array length: ${jsonArray.length()}")
+
                 for (i in 0 until jsonArray.length()) {
-                    val deviceJson = jsonArray.getJSONObject(i)
-                    val buttonsJson = deviceJson.getJSONObject("buttons")
+                    try {
+                        val deviceJson = jsonArray.getJSONObject(i)
+                        val buttonsJson = deviceJson.getJSONObject("buttons")
 
-                    val buttons = TvButtons(
-                        power = buttonsJson.getString("power"),
-                        mute = buttonsJson.getString("mute"),
-                        vol_up = buttonsJson.getString("vol_up"),
-                        vol_down = buttonsJson.getString("vol_down"),
-                        menu = buttonsJson.getString("menu"),
-                        source = buttonsJson.getString("source"),
-                        aspect = buttonsJson.optString("aspect", ""),
-                        color_mode = buttonsJson.optString("color_mode", ""),
-                        exit = buttonsJson.getString("exit"),
-                        up = buttonsJson.getString("up"),
-                        down = buttonsJson.getString("down"),
-                        left = buttonsJson.getString("left"),
-                        right = buttonsJson.getString("right"),
-                        ok = buttonsJson.getString("ok")
-                    )
+                        Log.d("IrCodeService", "Parseando dispositivo TV #$i: ${deviceJson.optString("brand")} ${deviceJson.optString("model")}")
 
-                    val device = TvDevice(
-                        id = deviceJson.getString("id"),
-                        brand = deviceJson.getString("brand"),
-                        model = deviceJson.getString("model"),
-                        protocol = deviceJson.getString("protocol"),
-                        buttons = buttons
-                    )
+                        val buttons = TvButtons(
+                            power = buttonsJson.optString("power", ""),
+                            mute = buttonsJson.optString("mute", ""),
+                            vol_up = buttonsJson.optString("vol_up", ""),
+                            vol_down = buttonsJson.optString("vol_down", ""),
+                            menu = buttonsJson.optString("menu", ""),
+                            source = buttonsJson.optString("input", ""), // La API usa "input" en lugar de "source"
+                            aspect = buttonsJson.optString("aspect", ""),
+                            color_mode = buttonsJson.optString("color_mode", ""),
+                            exit = buttonsJson.optString("exit", ""),
+                            up = buttonsJson.optString("up", ""),
+                            down = buttonsJson.optString("down", ""),
+                            left = buttonsJson.optString("left", ""),
+                            right = buttonsJson.optString("right", ""),
+                            ok = buttonsJson.optString("ok", ""),
+                            channel_up = buttonsJson.optString("channel_up", ""),
+                            channel_down = buttonsJson.optString("channel_down", "")
+                        )
 
-                    devices.add(device)
+                        val device = TvDevice(
+                            id = deviceJson.optString("id", ""),
+                            brand = deviceJson.optString("brand", ""),
+                            model = deviceJson.optString("model", ""),
+                            protocol = deviceJson.optString("protocol", "NEC"),
+                            buttons = buttons
+                        )
+
+                        devices.add(device)
+                        Log.d("IrCodeService", "Dispositivo TV agregado: ${device.brand} ${device.model}")
+
+                    } catch (e: Exception) {
+                        Log.e("IrCodeService", "Error parseando dispositivo TV #$i", e)
+                        // Continuar con el siguiente dispositivo
+                    }
                 }
+
+                Log.d("IrCodeService", "Total dispositivos TV parseados: ${devices.size}")
+
             } catch (e: Exception) {
-                e.printStackTrace()
+                Log.e("IrCodeService", "Error general parseando TV devices", e)
             }
             return devices
         }
